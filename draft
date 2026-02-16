@@ -76,3 +76,35 @@ Tasks:
 	- ctrl-D exits shell
 	- ctrl-\ does nothing
 		- .......?!?!?!
+- Built-in commands
+	- echo with option -n
+	- cd with only a relative or absolute path
+	- pwd (no options)
+	- export (no options)
+	- unset (no options)
+	- env (no options or args)
+	- exit (no options)
+- readline() may cause memory leaks, we ignore this
+
+
+Bonus tasks:
+- Handle && and || with parenthesis for priorities
+- Wildcards * should work for the current directory
+	- ...?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
