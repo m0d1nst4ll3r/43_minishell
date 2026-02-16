@@ -1,0 +1,78 @@
+Known funcs:
+printf
+malloc
+free
+write
+access
+open
+read
+close
+fork
+wait
+waitpid
+signal
+sigaction
+sigemptyset
+sigaddset
+kill
+exit
+unlink
+execve
+dup
+dup2
+pipe
+strerror
+perror
+
+Unknown funcs:
+readline
+rl_clear_history
+rl_on_new_line
+rl_replace_line
+rl_redisplay
+add_history
+wait3
+wait4
+getcwd
+chdir
+stat
+lstat
+opendir
+readdir
+closedir
+isatty
+ttyname
+ttyslot
+ioctl
+getenv
+tcsetattr
+tcgetattr
+tgetent
+tgetflag
+tgetnum
+tgetstr
+tgoto
+tputs
+
+
+
+Tasks:
+- Display a prompt when waiting for a new command
+- Have a working history
+- Search and launch the right executable (based on the PATH variable or using a relative or an absolute path)
+- Use at most one global variable to indicate a received signal
+	- What does that mean... ?!?!
+	- Using "norm" type structures in the global scope is forbidden... !?!
+- \ ; and posibly other special characters not required by the subject can be ignored
+- Handle '' and ""
+	- '' prevents shell from interpreting meta-characters in the quoted sequence
+	- "" works as '' but does not prevent $ interpretation
+- Handle < > << >> (like pipex basically, even heredoc)
+- Handle |
+- Handle environment variables $
+- Handle $? which expands to exit status of the most recently executed foreground pipeline
+- Handle ctrl-C, ctrl-D, ctrl-\
+	- ctrl-C displays a new prompt on a new line
+	- ctrl-D exits shell
+	- ctrl-\ does nothing
+		- .......?!?!?!
