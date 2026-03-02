@@ -1,0 +1,6 @@
+# Readline config file
+# Move this to ~/ for it to take effect with the test program
+
+# Prefix search
+"\e[A": history-search-backward
+"\e[B": history-search-forward
