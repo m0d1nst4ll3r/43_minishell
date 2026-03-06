@@ -24,17 +24,19 @@ pipe
 strerror
 perror
 
+Figured out:
+readline - send a string, readline will create a shell-like prompt, returns the line sent by user
+add_history - send a string, adds that string to readline's history (during prompt, can access history with keybinds)
+rl_clear_history - clear the readline history (no args)
+wait3 - like wait, but with the possibiity of sending a rusage struct to be filled - requires getrusage to be used, which isn't an allowed function..??
+wait4 - like waitpid, same as wait3
+getcwd - get current working directory, send buffer address and its size
+chdir - change current working directory, takes the absolute path (we'll have to build it ourselves I guess)
+
 Unknown funcs:
-readline
-rl_clear_history
-rl_on_new_line
-rl_replace_line
-rl_redisplay
-add_history
-wait3
-wait4
-getcwd
-chdir
+rl_on_new_line - tell the update routines that we have moved onto a new (empty) line, usually after ouputting a newline (..?)
+rl_replace_line - no doc?
+rl_redisplay - change what's displayed on the screen to reflect the current contents of rl_line_buffer (..?)
 stat
 lstat
 opendir
