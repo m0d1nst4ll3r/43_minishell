@@ -32,16 +32,14 @@ wait3 - like wait, but with the possibiity of sending a rusage struct to be fill
 wait4 - like waitpid, same as wait3
 getcwd - get current working directory, send buffer address and its size
 chdir - change current working directory, takes the absolute path (we'll have to build it ourselves I guess)
+stat - get file stats (not sure yet what for) in a struct stat structure
+lstat - get file stats but if the file is a symlink, get stats of the link file, not where it points
+opendir, readdir, closedir - allows reading directory contents (their files), not sure what for yet
 
 Unknown funcs:
 rl_on_new_line - tell the update routines that we have moved onto a new (empty) line, usually after ouputting a newline (..?)
 rl_replace_line - no doc?
 rl_redisplay - change what's displayed on the screen to reflect the current contents of rl_line_buffer (..?)
-stat
-lstat
-opendir
-readdir
-closedir
 isatty
 ttyname
 ttyslot
