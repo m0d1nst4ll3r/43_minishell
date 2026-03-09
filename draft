@@ -35,16 +35,16 @@ chdir - change current working directory, takes the absolute path (we'll have to
 stat - get file stats (not sure yet what for) in a struct stat structure
 lstat - get file stats but if the file is a symlink, get stats of the link file, not where it points
 opendir, readdir, closedir - allows reading directory contents (their files), not sure what for yet
+isatty - use to know whether file descriptor refers to a terminal (don't know what this is used for)
+ttyname, ttyslot - used to get the name of the tty (by fd) or slot of the current tty (no arg), no idea what this is for
+
 
 Unknown funcs:
 rl_on_new_line - tell the update routines that we have moved onto a new (empty) line, usually after ouputting a newline (..?)
 rl_replace_line - no doc?
 rl_redisplay - change what's displayed on the screen to reflect the current contents of rl_line_buffer (..?)
-isatty
-ttyname
-ttyslot
-ioctl
-getenv
+ioctl - a way to control device parameters (?) of "special files" (?) like maybe terminals
+getenv - 
 tcsetattr
 tcgetattr
 tgetent
@@ -95,15 +95,27 @@ Bonus tasks:
 
 
 
+Planning:
+- Display a prompt when waiting + Have a working history
+	- readline does this by itself, just need to call readline in a while and add_history the commands
+- Search and launch the right exec (based on PATH or using a relative or absolute path)
+	- This is like pipex, except in my pipex I didn't even bother to use absolute/relative path, I just searched PATH, so we need additional logic (basically if there is a '/' in the command name, use it as-is, do not search in PATH)
+- Use at most one global for signals, the global cannot be the god struct
+	- Ok, easy, but what do we need signals for?
+		- Ok we might need signals for Ctrl-C, Ctrl-D (readline returns NULL, easy), etc...
+		- By default Ctrl-C (which sends SIGINT) kills the program, but we can handle that signal ourselves and change its behavior to make readline just start over on a new line
+		- Ctrl+\ sends SIGQUIT, it makes the program quit, we can also handle this to do nothing
+- Handle '' and "" + Handle | + Handle env vars $ + Handle $?
+	- Now for this we have to read about tokenization, this is the main concept of the project, probably
+- Built-in commands
+	- Should only work on these once we have tokens working
+	- Once tokens are done and we can send to e.g echo() a curated and fully transformed list of strings like one we would send to an execve program, then we'll find that echo() is literally just a printf("%s", strs[i]) in a while, and we only have to handle -n (has to be 1st, btw, otherwise it's printed)
+	- pwd is extremely easy
+	- exit too
+	- cd is not easy, it needs to handle any combination of ".", "..", chdir takes absolute path
+	- idk about rest
 
-
-
-
-
-
-
-
-
+The main takeaway is that we really need to research TOKENS first. Or, how to decompose "< in cat "-t" '-e'  "../test/$FILE.txt"  | "wc -l" | ls > out" into an ordered series of signifiers, and how to treat it in an ordered systematic way. It's the main hurdle of the project, really.
 
 
 
