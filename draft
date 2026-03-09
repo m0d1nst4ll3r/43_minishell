@@ -117,6 +117,7 @@ Planning:
 
 The main takeaway is that we really need to research TOKENS first. Or, how to decompose "< in cat "-t" '-e'  "../test/$FILE.txt"  | "wc -l" | ls > out" into an ordered series of signifiers, and how to treat it in an ordered systematic way. It's the main hurdle of the project, really.
 
+Search "Lexical Analyzer Tokens Programming" or some such online and read about how a lexer works, how to build one, etc etc. Ask ChatGPT, or whatever.
 
 
 
