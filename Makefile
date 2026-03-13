@@ -6,17 +6,25 @@
 #    By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 16:45:41 by rapohlen          #+#    #+#              #
-#    Updated: 2026/02/16 14:39:12 by rapohlen         ###   ########.fr        #
+#    Updated: 2026/03/13 15:56:48 by rapohlen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Source files
-CFILES		= main.c
+CFILES		= main.c \
+			  build_env.c \
+			  setup_signal_handlers.c \
+			  cleanup_line.c \
+			  cleanup_env.c \
+			  parse.c \
+			  execute.c \
+			  print_error.c
 SRCDIR		= src
 SRC			= $(addprefix $(SRCDIR)/, $(CFILES))
 
 # Header directories
-INCDIR		= inc
+INCDIR		= inc \
+			  libft/inc
 
 # Build directory
 BUILDDIR	= .build
@@ -30,7 +38,7 @@ NAME		= minishell
 
 # Libraries
 LIB			= $(LIBFT)
-LINK		=
+LINK		= -lreadline
 LIBFT		= libft/libft.a
 LIBFT_REPO	= https://github.com/m0d1nst4ll3r/43_mylibft
 
@@ -58,6 +66,10 @@ $(LIBFT):
 $(BUILDDIR)/%.o: %.c | $(LIB)
 			@mkdir -p $(@D)
 			$(CC) $(CFLAGS) -c -o $@ $<
+
+# Valgrind memory test
+valgrind:	$(NAME)
+			valgrind --leak-check=full --show-leak-kinds=all --suppressions=valgrind.supp --gen-suppressions=all ./$(NAME)
 
 # Cleanup
 clean:
