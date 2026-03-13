@@ -125,3 +125,4 @@ This is where the fun begins
 5. `ls > out | wc < out` causes a display of `0 0 0` because wc reads out AFTER it was opened with `O_TRUNC` but BEFORE ls writes anything to it. Theoretically anything can happen, but in reality wc is always faster than ls.
 6. Just spaces (and tabs and newlines, though we don't handle newlines anyway) does nothing - shouldn't segfault
 	- In our logic our `cmd_list` will just be NULL if we only encountered whitespaces
+7. `export test=lol | echo $test` prints nothing but a newline, because export runs in its own subshell (fork), so the env modifications cannot be reflected in the next subshell that runs echo
