@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/13 17:27:16 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/13 18:14:24 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static void	error_stop(char **env, char *err_str)
 //		b. Add history
 //		c. Build command table (parser)
 //		d. Execute command table (executor)
+//		e. Free line & command table
 int	main(int ac, char **av, char **ep)
 {
 	t_minishell	data;
@@ -40,7 +41,7 @@ int	main(int ac, char **av, char **ep)
 	(void)ac;
 	(void)av;
 	data.env = build_env(ep);
-	if (setup_signal_handlers())
+	if (setup_signal_handlers()) // Memo: restore defaults after fork()
 		error_stop(data.env, ERR_SIGNAL);
 	while (1)
 	{

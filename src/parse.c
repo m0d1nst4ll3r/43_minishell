@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:10 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/13 15:44:53 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/13 17:56:05 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,3 +23,33 @@ t_command_table	parse(char *line)
 	cmd_table.outfile = NULL;
 	return (cmd_table);
 }
+
+/*	Parser
+ *
+ * Lines follow
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+*/

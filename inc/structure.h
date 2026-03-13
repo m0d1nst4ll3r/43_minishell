@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:00:56 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/13 16:57:22 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/13 18:14:24 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ typedef struct s_command_table
 {
 	int			num_cmd;
 	t_command	*array;
-	char		**infile;
-	char		**outfile;
+	char		*infile;
+	char		*outfile;
 }	t_command_table;
 
 typedef struct s_minishell

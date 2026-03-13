@@ -109,3 +109,17 @@ typedef struct s_minishell
 ```
 
 Not much else? Seems like a simple project.
+
+### Details
+
+This is where the fun begins
+
+1. `/../../../../../../../../../../../../` is `/`, meaning if `..` can't go higher, it is ignored and doesn't cause any errors
+	- This is an important detail for `cd`
+2. `ls > out > out2 > out3 > out4 > out5 > out6 > lol > this > project > is > gonna > be > fun` is valid input and *ALL* the files will be created, although only the file that appears *last* will contain the output
+	- Similarly, `> out ls` works and `> out > out2 > out3 ls > out4` works (only out4 will contain the output)
+	- `ls > lsout | grep l > grepout | wc -l > wcout` is perfectly valid, each command's stdout is redirected to its respective file, but since stdout is already redirected to a file, it is not redirected to the pipe, and therefore both grep and wc will have no input
+3. `/../../../../../../home/rapohlen/./././../../usr/bin/cat blahblahblah` prints `/../../../../../../home/rapohlen/./././../../usr/bin/cat: blahblahblah: No such file or directory`, so it is clear that argv[0] contains whatever string was sent to bash rather than a curated `cat` version
+4. `2>&1` etc... is out-of-scope and should not be handled (only basic > < >> <<)
+	- This will cause differences with bash but... can't recode bash entirely
+5. `ls > out | wc < out` causes a display of `0 0 0` because wc reads out AFTER it was opened with `O_TRUNC` but BEFORE ls writes anything to it. Theoretically anything can happen, but in reality wc is always faster than ls.

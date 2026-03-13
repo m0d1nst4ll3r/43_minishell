@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:09:43 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/13 17:47:46 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/13 18:01:39 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	sigint_handler(int signum)
 {
 	(void)signum;
 	rl_replace_line("", 1);
-	printf("\n");
+	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_redisplay();
 }
