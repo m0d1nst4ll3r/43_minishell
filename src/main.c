@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/13 18:14:24 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/13 18:57:09 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ int	main(int ac, char **av, char **ep)
 			break ;
 		add_history(data.line);
 		printf("You typed: %s\n", data.line);
-		data.cmd_table = parse(data.line);
-		data.last_return = execute(data.cmd_table);
-		cleanup_line(data.line, data.cmd_table);
+		data.cmd_list = parse(data.line);
+		data.last_return = execute(data.cmd_list);
+		cleanup_line(data.line, data.cmd_list);
 	}
 	cleanup_prog(data.env);
 	return (0);
