@@ -6,22 +6,21 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:40:29 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/13 15:42:17 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/13 17:01:56 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	cleanup_env(t_env_list *env)
+void	cleanup_env(char **env)
 {
-	t_env_list	*last;
+	size_t	i;
 
-	while (env)
+	i = 0;
+	while (env[i])
 	{
-		last = env;
-		env = env->next;
-		free(last->key);
-		free(last->value);
-		free(last);
+		free(env[i]);
+		i++;
 	}
+	free(env);
 }
