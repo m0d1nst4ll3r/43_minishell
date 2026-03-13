@@ -5,31 +5,29 @@
 ### Goals
 
 1. Write a loop logic with readline which will
-	a. Display a prompt when waiting for a new command
-	b. Have a working history
-	c. Display a new prompt on a new line with Ctrl-C (SIGINT)
-	d. Exit the shell with Ctrl-D (only if line empty?)
-	e. Do nothing on Ctrl-\ (SIGQUIT)
+	1. Display a prompt when waiting for a new command
+	2. Have a working history
+	3. Display a new prompt on a new line with Ctrl-C (SIGINT)
+	4. Exit the shell with Ctrl-D (only if line empty?)
+	5. Do nothing on Ctrl-\ (SIGQUIT)
 2. Write parser logic which will read and execute the user's commands
-	a. Anything in "" counts as one word but $ env vars inside are still expanded
-	b. Anything in '' counts as one word AND $ env vars are not expanded
-	c. Pipes redirect previous cmd stdout to next cmd stdin
-	d. < redirects 1st cmd stdin to a file
-	e. << redirects 1st cmd stdin to a heredoc temp file with a limiter keyword
-	f. > redirects last cmd stdout to a file (O_TRUNC)
-	g. >> redirects last cmd stdout to a file (O_APPEND)
-	h. $ env vars are expanded to their env value
-	i. $? expands to last cmd's return value
+	1. Anything in "" counts as one word but $ env vars inside are still expanded
+	2. Anything in '' counts as one word AND $ env vars are not expanded
+	3. Pipes redirect previous cmd stdout to next cmd stdin
+	4. < redirects 1st cmd stdin to a file
+	5. << redirects 1st cmd stdin to a heredoc temp file with a limiter keyword
+	6. > redirects last cmd stdout to a file (O_TRUNC)
+	7. >> redirects last cmd stdout to a file (O_APPEND)
+	8. $ env vars are expanded to their env value
+	9. $? expands to last cmd's return value
 3. Write built-in commands
-	a. echo with -n
-	b. cd with relative/absolute path
-	c. pwd
-	d. export
-	e. unset
-	f. env
-	g. exit
-
-1. and 3. are relatively simple. 2. is not that hard. No need for a lexer, tokenizer or anything. Just need a simple logic to decompose a line into a command structure (parser), and then execute it (executor).
+	1. echo with -n
+	2. cd with relative/absolute path
+	3. pwd
+	4. export
+	5. unset
+	6. env
+	7. exit
 
 ### 1 - Basic loop & signals
 
@@ -53,30 +51,11 @@ There should be no need for any global variables (?).
 
 ### 2 - Parser/Executor
 
-The simplest is to decompose the line into a series of commands with their name (the first word that appears), and everything that follows. The structure should also have a stdin and stdout, either NULL or a filename.
+Parser fills a chained list containing commands and their respective redirections, in the order in which they appear in pipes. This is sent to the executor.
 
-```c
-typedef struct s_command_table
-{
-	t_command	*commands; // cmd0 stdout will go into cmd1 stdin, etc...
-	char		*stdin; // NULL if no redirection
-	char		*stdout;
-}	t_command_table;
-```
+No need for tokens imo.
 
-Each command looks like:
-
-```c
-typedef struct s_command
-{
-	char	*name; // Un-transformed 1st word (only $ is expanded), executor will handle rest
-	char	**argv; // Un-transformed 2nd, 3rd, etc... words (only $ is expanded)
-}	t_command;
-```
-
-The *parser* makes these two structs. The executor will then take them and handle them, returning the return value which will be written in `last_return` ($? expands to that, it is 0 on startup).
-
-This is essentially pipex, but with a better parser that handles $ " '.
+This is 80% of the work.
 
 ### 3 - Built-in commands
 
@@ -88,27 +67,13 @@ Built-ins do not try to read from stdin (stdin redirections will do nothing). In
 
 `pwd` is a printf of getcwd's return. Can eventually make size potentially infinite by looking at ERANGE error return and using malloc + doubling size for next try, with a reasonable limit (like 32MB).
 
-`export` haven't looked at it yet, need a func to add to env, or build our own envp `char **`.
+`export` needs to add to our custom `char **env` array, therefore re-malloc'ing and copying over everything - this is tedious and inefficient but it is better than a chained list because you just pass it as-is to execve
 
 `unset` same as above.
 
 `env` dumb printf in a while.
 
 `exit` just cleanup + leave.
-
-### Program structure
-
-```c
-typedef struct s_minishell
-{
-	char			*line; // Return from readline
-	t_command_table	command_table; // Created by parser, read by executor
-	unsigned char	last_return; // 0 to 255
-	char			**env; // Custom environment, needed for export, unset, env
-}	t_minishell;
-```
-
-Not much else? Seems like a simple project.
 
 ### Details
 
@@ -126,3 +91,5 @@ This is where the fun begins
 6. Just spaces (and tabs and newlines, though we don't handle newlines anyway) does nothing - shouldn't segfault
 	- In our logic our `cmd_list` will just be NULL if we only encountered whitespaces
 7. `export test=lol | echo $test` prints nothing but a newline, because export runs in its own subshell (fork), so the env modifications cannot be reflected in the next subshell that runs echo
+	- Similarly, `exit | echo test` does not exit, the exit would run in the sub-shell
+8. execve parses the program path by itself - you can send `/../../../../usr/././././bin/../bin/ls`
