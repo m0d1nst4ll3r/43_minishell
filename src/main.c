@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/13 18:57:09 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/16 19:13:02 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,10 @@ int	main(int ac, char **av, char **ep)
 
 	(void)ac;
 	(void)av;
-	data.env = build_env(ep);
 	if (setup_signal_handlers()) // Memo: restore defaults after fork()
 		error_stop(data.env, ERR_SIGNAL);
+	data.env = build_env(ep);
+	data.last_return = 0;
 	while (1)
 	{
 		data.line = readline(PROMPT);
@@ -50,7 +51,7 @@ int	main(int ac, char **av, char **ep)
 			break ;
 		add_history(data.line);
 		printf("You typed: %s\n", data.line);
-		data.cmd_list = parse(data.line);
+		data.cmd_list = parse(&data);
 		data.last_return = execute(data.cmd_list);
 		cleanup_line(data.line, data.cmd_list);
 	}

@@ -1,30 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   util.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/13 15:30:10 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/16 19:07:03 by rapohlen         ###   ########.fr       */
+/*   Created: 2026/03/16 18:37:41 by rapohlen          #+#    #+#             */
+/*   Updated: 2026/03/16 22:40:08 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_command	*organize(t_token *token_list)
+void	*ft_malloc(size_t size)
 {
-	(void)token_list;
-	return (NULL);
+	void	*p;
+
+	p = malloc(size);
+	if (!p)
+		print_error(ERR_MALLOC);
+	return (p);
 }
 
-t_command	*parse(const t_minishell *d)
+int	is_envar_char(char c)
 {
-	t_token		*token_list;
-	t_command	*cmd_list;
+	return (c == '_' || ft_isdigit(c) || ft_islower(c) || ft_isupper(c));
+}
 
-	token_list = tokenize(d);
-	cmd_list = organize(token_list);
-	cleanup_token_list(token_list);
-	return (cmd_list);
+size_t	get_uchar_len(unsigned char u)
+{
+	if (u < 10)
+		return (1);
+	if (u < 100)
+		return (2);
+	return (3);
 }

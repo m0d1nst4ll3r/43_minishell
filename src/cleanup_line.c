@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:33:14 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/16 11:04:10 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/16 22:35:56 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	cleanup_argv(char **argv)
 
 static void	cleanup_redir(t_redir *redir)
 {
-	t_redir *last;
+	t_redir	*last;
 
 	while (redir)
 	{

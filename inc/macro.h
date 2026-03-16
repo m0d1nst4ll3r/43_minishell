@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:04:36 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/16 14:52:52 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/16 17:18:46 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,6 @@
 # define ERR_SIGNAL		"sigaction error"
 # define ERR_UNFQUOTE	"unexpected EOF while looking for matching `''"
 # define ERR_UNFDQUOTE	"unexpected EOF while looking for matching `\"'"
+# define ERR_SYNTAX		"syntax error"
 
 #endif

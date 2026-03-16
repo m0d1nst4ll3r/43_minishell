@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:00:56 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/16 12:59:24 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/16 22:37:40 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 # define STRUCTURE_H
 
 // ================================ PARSER LIST ================================
+typedef enum e_parse_state
+{
+	STATE_QUOTE,
+	STATE_DQUOTE,
+	STATE_NONE
+}	t_parse_state;
+
 typedef enum e_token_type
 {
 	TOKEN_LESSER,
@@ -21,7 +28,8 @@ typedef enum e_token_type
 	TOKEN_LESSERLESSER,
 	TOKEN_GREATERGREATER,
 	TOKEN_PIPE,
-	TOKEN_WORD
+	TOKEN_WORD,
+	TOKEN_EMPTY
 }	t_token_type;
 
 typedef struct s_token
@@ -34,10 +42,10 @@ typedef struct s_token
 // =============================== COMMAND LIST ================================
 typedef enum e_redir_type
 {
-	REDIR_IN, // <
-	REDIR_OUT, // >
-	REDIT_APPEND, // >>
-	REDIR_HEREDOC // <<
+	REDIR_IN,
+	REDIR_OUT,
+	REDIT_APPEND,
+	REDIR_HEREDOC
 }	t_redir_type;
 
 // Chained list for simplicity

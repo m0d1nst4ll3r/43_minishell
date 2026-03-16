@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:58:12 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/13 17:03:04 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/16 18:39:09 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,7 @@ char	**build_env(char **envp)
 		len++;
 	env = malloc(sizeof(*env) * (len + 1));
 	if (!env)
-	{
-		print_error(ERR_MALLOC);
 		return (NULL);
-	}
 	fill_env(env, envp);
 	return (env);
 }
