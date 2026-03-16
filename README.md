@@ -99,3 +99,4 @@ This is where the fun begins
 	- Just typing `FOO=bar` creates a *shell* variable, invisible in `env`
 	- bash has *built-in* shell variables, such as **IFS** - that one contains ' \t\n', which is the list of word-separators used after expansions (not by the lexical parsing of the line)
 	- You can *modify* IFS to *add different word-separators*. Obviously this is cosmic-level absurd complexity and we should not handle this.
+10. An env variable has to be `[a-zA-Z0-9_]+` and it cannot start with a digit
