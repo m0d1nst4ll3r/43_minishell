@@ -81,6 +81,7 @@ This is where the fun begins
 
 1. `/../../../../../../../../../../../../` is `/`, meaning if `..` can't go higher, it is ignored and doesn't cause any errors
 	- This is an important detail for `cd`
+	- Update: turns out chdir handles this itself, so we don't have to care or build a crazy parser for this
 2. `ls > out > out2 > out3 > out4 > out5 > out6 > lol > this > project > is > gonna > be > fun` is valid input and *ALL* the files will be created, although only the file that appears *last* will contain the output
 	- Similarly, `> out ls` works and `> out > out2 > out3 ls > out4` works (only out4 will contain the output)
 	- `ls > lsout | grep l > grepout | wc -l > wcout` is perfectly valid, each command's stdout is redirected to its respective file, but since stdout is already redirected to a file, it is not redirected to the pipe, and therefore both grep and wc will have no input
@@ -93,3 +94,8 @@ This is where the fun begins
 7. `export test=lol | echo $test` prints nothing but a newline, because export runs in its own subshell (fork), so the env modifications cannot be reflected in the next subshell that runs echo
 	- Similarly, `exit | echo test` does not exit, the exit would run in the sub-shell
 8. execve parses the program path by itself - you can send `/../../../../usr/././././bin/../bin/ls`
+9. Variables can be environment variables (displayed with `env`, passed to child processes), but they can also be *shell* variables, visible in the shell but not with `env` and not passed to children
+	- `export` is the way to make a shell variable into an environment variable
+	- Just typing `FOO=bar` creates a *shell* variable, invisible in `env`
+	- bash has *built-in* shell variables, such as **IFS** - that one contains ' \t\n', which is the list of word-separators used after expansions (not by the lexical parsing of the line)
+	- You can *modify* IFS to *add different word-separators*. Obviously this is cosmic-level absurd complexity and we should not handle this.

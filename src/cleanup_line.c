@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:33:14 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/13 19:07:29 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/16 11:04:10 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ static void	cleanup_redir(t_redir *redir)
 	}
 }
 
-void	cleanup_line(char *line, t_command_list *cmd_list)
+void	cleanup_line(char *line, t_command *cmd_list)
 {
-	t_command_list	*last;
+	t_command	*last;
 
 	free(line);
 	while (cmd_list)

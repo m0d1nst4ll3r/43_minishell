@@ -6,13 +6,13 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/13 19:10:06 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/16 11:05:11 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	execute(t_command_list *cmd_list)
+int	execute(t_command *cmd_list)
 {
 	(void)cmd_list;
 	return (0);

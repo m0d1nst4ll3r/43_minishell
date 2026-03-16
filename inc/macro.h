@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:04:36 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/13 17:53:59 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/16 14:52:52 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,7 @@
 # define ERR_DEFAULT	"unspecified error"
 # define ERR_MALLOC		"malloc error"
 # define ERR_SIGNAL		"sigaction error"
+# define ERR_UNFQUOTE	"unexpected EOF while looking for matching `''"
+# define ERR_UNFDQUOTE	"unexpected EOF while looking for matching `\"'"
 
 #endif
