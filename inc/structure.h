@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:00:56 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/16 22:37:40 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:37:58 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@ typedef enum e_parse_state
 {
 	STATE_QUOTE,
 	STATE_DQUOTE,
-	STATE_NONE
+	STATE_NONE,
+	STATE_BEGIN,
+	STATE_PIPE,
+	STATE_REDIR,
+	STATE_WORD
 }	t_parse_state;
 
 typedef enum e_token_type
@@ -44,8 +48,8 @@ typedef enum e_redir_type
 {
 	REDIR_IN,
 	REDIR_OUT,
-	REDIT_APPEND,
-	REDIR_HEREDOC
+	REDIR_HEREDOC,
+	REDIT_APPEND
 }	t_redir_type;
 
 // Chained list for simplicity

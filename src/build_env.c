@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:58:12 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/16 18:39:09 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:12:13 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ static void	fill_env(char **env, char **envp)
 	{
 		env[i] = ft_strdup(envp[i]);
 		if (!env[i])
+		{
+			print_error(ERR_MALLOC);
 			break ;
+		}
 		i++;
 	}
 	env[i] = NULL;

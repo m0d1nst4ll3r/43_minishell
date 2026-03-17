@@ -6,7 +6,7 @@
 #    By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 16:45:41 by rapohlen          #+#    #+#              #
-#    Updated: 2026/03/17 12:36:23 by rapohlen         ###   ########.fr        #
+#    Updated: 2026/03/17 16:25:58 by rapohlen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,13 +14,14 @@
 CFILES		= main.c \
 			  build_env.c \
 			  setup_signal_handlers.c \
-			  cleanup_line.c \
-			  cleanup_env.c \
+			  cleanup.c \
 			  parse.c \
 			  parse_tokenize.c \
 			  parse_tokenize_fill.c \
 			  parse_tokenize_len.c \
 			  parse_tokenize_util.c \
+			  parse_organize.c \
+			  parse_organize_fill.c \
 			  execute.c \
 			  print_error.c \
 			  util.c

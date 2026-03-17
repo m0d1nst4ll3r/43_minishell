@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:02:05 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/17 12:41:54 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/17 16:37:35 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_token	*tokenize(t_minishell *d)
 		new_node = get_token(d, &i);
 		if (!new_node)
 		{
-			cleanup_token_list(token_list);
+			cleanup_token_list(token_list, 1);
 			return (NULL);
 		}
 		if (!token_list)

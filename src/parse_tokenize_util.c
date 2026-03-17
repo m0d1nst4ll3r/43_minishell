@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:59:11 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/16 19:39:47 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:19:38 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,4 @@ void	update_state(char c, t_parse_state *state, size_t *i)
 			*state = STATE_DQUOTE;
 	}
 	(*i)++;
-}
-
-void	cleanup_token_list(t_token *token_list)
-{
-	t_token	*last;
-
-	while (token_list)
-	{
-		last = token_list;
-		token_list = token_list->next;
-		free(last->word);
-		free(last);
-	}
 }
