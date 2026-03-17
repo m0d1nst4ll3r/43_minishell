@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:37:41 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/16 22:40:08 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/17 18:01:19 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,22 @@ size_t	get_uchar_len(unsigned char u)
 	if (u < 100)
 		return (2);
 	return (3);
+}
+
+char	*get_env(char *key, char **env)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (env[i])
+	{
+		j = 0;
+		while (key[j] == env[i][j])
+			j++;
+		if (!key[j] && env[i][j] == '=')
+			return (env[i] + j + 1);
+		i++;
+	}
+	return (NULL);
 }
