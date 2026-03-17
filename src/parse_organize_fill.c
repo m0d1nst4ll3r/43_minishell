@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 15:51:44 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/17 16:36:35 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/17 17:42:31 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	create_new_cmd(t_command **cmd_list, size_t argv_count, t_command **last)
 		free(new_cmd);
 		return (0);
 	}
-	ft_memset(new_cmd->argv, 0, argv_count + 1);
+	ft_memset(new_cmd->argv, 0, sizeof(*new_cmd->argv) * (argv_count + 1));
 	new_cmd->redir = NULL;
 	new_cmd->next = NULL;
 	if (!*cmd_list)
@@ -72,4 +72,3 @@ int	fill_cmd(t_token **token_list, t_command *cmd)
 	}
 	return (1);
 }
-

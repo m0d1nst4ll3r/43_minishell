@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/17 16:36:35 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/17 17:43:12 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void			update_state(char c, t_parse_state *state, size_t *i);
 t_command		*organize(t_token *token_list);
 int				fill_cmd(t_token **token_list, t_command *cmd);
 int				create_new_cmd(t_command **cmd_list, size_t argv_count,
-		t_command **last);
+					t_command **last);
 
 //
 //	Executor

@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:43:47 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/16 22:45:50 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/17 17:42:05 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static size_t	check_state(t_parse_state state, size_t len, int had_quotes)
 static int	is_valid_envar_syntax(t_parse_state state, char *line)
 {
 	return (state != STATE_QUOTE && line[0] == '$' && (line[1] == '?'
-			|| (!ft_isdigit(line[1] && is_envar_char(line[1])))));
+			|| (!ft_isdigit(line[1]) && is_envar_char(line[1]))));
 }
 
 int	get_word_len(t_minishell *d, size_t i)
