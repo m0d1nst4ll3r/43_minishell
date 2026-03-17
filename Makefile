@@ -6,7 +6,7 @@
 #    By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 16:45:41 by rapohlen          #+#    #+#              #
-#    Updated: 2026/03/13 15:56:48 by rapohlen         ###   ########.fr        #
+#    Updated: 2026/03/17 12:36:23 by rapohlen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,13 @@ CFILES		= main.c \
 			  cleanup_line.c \
 			  cleanup_env.c \
 			  parse.c \
+			  parse_tokenize.c \
+			  parse_tokenize_fill.c \
+			  parse_tokenize_len.c \
+			  parse_tokenize_util.c \
 			  execute.c \
-			  print_error.c
+			  print_error.c \
+			  util.c
 SRCDIR		= src
 SRC			= $(addprefix $(SRCDIR)/, $(CFILES))
 

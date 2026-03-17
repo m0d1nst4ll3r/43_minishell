@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:10 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/16 19:07:03 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/17 12:35:17 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static t_command	*organize(t_token *token_list)
 	return (NULL);
 }
 
-t_command	*parse(const t_minishell *d)
+t_command	*parse(t_minishell *d)
 {
 	t_token		*token_list;
 	t_command	*cmd_list;
