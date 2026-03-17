@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:02:05 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/16 22:28:29 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/17 12:41:54 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static int	get_token_word(t_minishell *d, size_t *i, t_token *new)
 		free(new);
 		return (0);
 	}
+	new->word[word_len] = 0;
 	fill_word(d, i, new->word);
 	return (1);
 }
