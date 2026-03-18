@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/18 18:54:15 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/18 19:07:55 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int				create_new_cmd(t_command **cmd_list, size_t argv_count,
 //
 unsigned char	cd(int ac, char **av, char **ep);
 unsigned char	echo(int ac, char **av, char **ep);
+unsigned char	pwd(int ac, char **av, char **ep);
 
 //
 //	Util
