@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:58:12 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/18 16:04:42 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:12:13 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	**build_env(char **envp)
 	len = 0;
 	while (envp[len])
 		len++;
-	env = ft_malloc(sizeof(*env) * (len + 1));
+	env = malloc(sizeof(*env) * (len + 1));
 	if (!env)
 		return (NULL);
 	fill_env(env, envp);
