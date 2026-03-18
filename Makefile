@@ -6,7 +6,7 @@
 #    By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 16:45:41 by rapohlen          #+#    #+#              #
-#    Updated: 2026/03/17 16:25:58 by rapohlen         ###   ########.fr        #
+#    Updated: 2026/03/18 19:22:21 by rapohlen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,10 @@ CFILES		= main.c \
 			  parse_organize_fill.c \
 			  execute.c \
 			  print_error.c \
-			  util.c
+			  util.c \
+			  cd.c \
+			  pwd.c \
+			  echo.c
 SRCDIR		= src
 SRC			= $(addprefix $(SRCDIR)/, $(CFILES))
 

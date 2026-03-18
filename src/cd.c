@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 17:44:40 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/18 18:49:07 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/18 19:23:02 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,10 @@ unsigned char	cd(int ac, char **av, char **ep)
 	}
 	else if (ac == 1)
 		return (cd_home(av[0], ep));
-	else
-		if (chdir(av[1]))
-		{
-			print_error_builtin(av[0], av[1]);
-			return (1);
-		}
+	else if (chdir(av[1]))
+	{
+		print_error_builtin(av[0], av[1]);
+		return (1);
+	}
 	return (0);
 }
