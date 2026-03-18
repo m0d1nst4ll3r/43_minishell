@@ -6,7 +6,6 @@
 #define TOKEN_GREATERGREATER_STR	" >> "
 #define TOKEN_PIPE_STR				"  | "
 #define TOKEN_WORD_STR				"WORD"
-#define TOKEN_EMPTY_STR				"EMPT"
 
 char	*get_token_type_str(t_token_type token_type)
 {
@@ -20,9 +19,7 @@ char	*get_token_type_str(t_token_type token_type)
 		return (TOKEN_GREATERGREATER_STR);
 	if (token_type == TOKEN_PIPE)
 		return (TOKEN_PIPE_STR);
-	if (token_type == TOKEN_WORD)
-		return (TOKEN_WORD_STR);
-	return (TOKEN_EMPTY_STR);
+	return (TOKEN_WORD_STR);
 }
 
 void	print_token_list(t_token *token_list)

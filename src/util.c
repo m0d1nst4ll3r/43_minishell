@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:37:41 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/17 18:01:19 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/18 16:12:55 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,25 @@ char	*get_env(char *key, char **env)
 		while (key[j] == env[i][j])
 			j++;
 		if (!key[j] && env[i][j] == '=')
+			return (env[i] + j + 1);
+		i++;
+	}
+	return (NULL);
+}
+
+// Limited to n bytes, when the key string doesn't end with \0
+char	*get_env_n(char *key, char **env, size_t n)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (env[i])
+	{
+		j = 0;
+		while (j < n && key[j] == env[i][j])
+			j++;
+		if (j == n && env[i][j] == '=')
 			return (env[i] + j + 1);
 		i++;
 	}
