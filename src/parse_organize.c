@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 15:47:59 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/18 16:50:49 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/17 16:25:17 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	update_state_organize(t_parse_state *state, t_token_type token)
 		*state = STATE_PIPE;
 	else if (token < 4)
 		*state = STATE_REDIR;
-	else
+	else if (token == TOKEN_WORD)
 		*state = STATE_WORD;
 }
 

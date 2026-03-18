@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:00:56 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/18 16:33:50 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:37:58 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ typedef enum e_token_type
 	TOKEN_LESSERLESSER,
 	TOKEN_GREATERGREATER,
 	TOKEN_PIPE,
-	TOKEN_WORD
+	TOKEN_WORD,
+	TOKEN_EMPTY
 }	t_token_type;
 
 typedef struct s_token
