@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/17 16:29:36 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/18 19:39:21 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	main(int ac, char **av, char **ep)
 	(void)av;
 	if (setup_signal_handlers()) // Memo: restore defaults after fork()
 		error_stop(data.env, ERR_SIGNAL);
-	data.env = build_env(ep);
+	data.env = build_env(ep); // Memo: problem if entire env couldn't be malloc'd (see unset and export too) - cannot pass NULL to execve
 	data.last_return = 0;
 	while (1)
 	{

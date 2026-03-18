@@ -6,13 +6,13 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 17:44:40 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/18 19:23:02 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/18 19:46:47 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static unsigned char	cd_home(char *name, char **ep)
+static int	cd_home(char *name, char **ep)
 {
 	char	*home;
 
@@ -33,7 +33,7 @@ static unsigned char	cd_home(char *name, char **ep)
 // cd built-in
 // needs environment to search for HOME when used without args
 // does not change PWD or OLDPWD
-unsigned char	cd(int ac, char **av, char **ep)
+int	builtin_cd(int ac, char **av, char **ep)
 {
 	if (ac > 2)
 	{

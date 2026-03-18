@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:37:41 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/17 18:01:19 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/18 19:55:58 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,14 @@ char	*get_env(char *key, char **env)
 		i++;
 	}
 	return (NULL);
+}
+
+size_t	get_env_size(char **env)
+{
+	size_t	i;
+
+	i = 0;
+	while (env[i])
+		i++;
+	return (i);
 }

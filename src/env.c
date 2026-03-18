@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/18 19:00:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/18 19:47:11 by rapohlen         ###   ########.fr       */
+/*   Created: 2026/03/18 19:24:43 by rapohlen          #+#    #+#             */
+/*   Updated: 2026/03/18 19:47:03 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	builtin_pwd(int ac, char **av, char **ep)
+int	builtin_env(int ac, char **av, char **ep)
 {
-	char	*pwd;
+	size_t	i;
 
 	(void)ac;
-	(void)ep;
-	pwd = getcwd(NULL, 0);
-	if (pwd)
-		printf("%s\n", pwd);
-	else
-	{
-		print_error_builtin(av[0], ERR_PWD);
-		return (1);
-	}
+	(void)av;
+	if (!ep)
+		return (0);
+	i = 0;
+	while (ep[i])
+		printf("%s\n", ep[i++]);
 	return (0);
 }
