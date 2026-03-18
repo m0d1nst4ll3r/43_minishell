@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 17:44:40 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/17 18:07:35 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/18 18:49:07 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static unsigned char	cd_home(char *name, char **ep)
 
 // cd built-in
 // needs environment to search for HOME when used without args
+// does not change PWD or OLDPWD
 unsigned char	cd(int ac, char **av, char **ep)
 {
 	if (ac > 2)
