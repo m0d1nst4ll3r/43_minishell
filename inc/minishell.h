@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:59:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/18 18:39:35 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/19 10:36:14 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 
 // =================================== USER ===================================
 # include "libft.h"
-# include "macro.h"
-# include "prototype.h"
 # include "structure.h"
+# include "prototype.h"
+# include "macro.h"
 
 #endif
