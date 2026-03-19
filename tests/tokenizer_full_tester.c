@@ -61,5 +61,5 @@ int	main(int ac, char **av, char **ep)
 	if (!token_list)
 		printf("(empty)\n");
 	print_token_list(token_list);
-	cleanup_token_list(token_list);
+	cleanup_token_list(token_list, 1);
 }

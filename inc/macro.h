@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:04:36 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/18 19:03:47 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/19 14:49:31 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,7 @@
 # define ERR_CDARGS		"too many arguments"
 # define ERR_CDHOME		"HOME not set"
 # define ERR_PWD		"getcwd error"
+# define ERR_EXPIDEN	"not a valid identifier"
+# define ERR_EXPEQ		"missing '='"
 
 #endif

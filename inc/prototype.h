@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/18 19:55:58 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/19 14:57:18 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ size_t			get_env_size(char **env);
 // Error
 void			print_error(char *err_str);
 void			print_error_builtin(char *name, char *err_str);
+void			print_error_builtin_file(char *name, char *file, char *err_str);
 // Cleanup
 void			cleanup_env(char **env);
 void			cleanup_token_list(t_token *token_list, int clean_contents);
