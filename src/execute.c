@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/19 14:36:11 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/19 14:53:07 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,11 +209,76 @@ void	handle_redir(t_command *cmd)
 /*========================================================*/
 /* CHILD PROCESS*/
 /*========================================================*/
-void child_process(t_command *cmd, char **env, int fd)
+
+char	*search_in_paths(char *cmd, char **paths)
 {
-	if (fd != -1)
-		dup2(fd, STDIN_FILENO);
-	
+	int		i;
+	char	*tmp;
+	char	*path;
+
+	if (!cmd || !paths)
+		return (NULL);
+	i = 0;
+	while (paths[i])
+	{
+		tmp = ft_strjoin(paths[i], "/");
+		if (!tmp)
+			return (free_split(paths), NULL);
+		path = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (!path)
+			return (free_split(paths), NULL);
+		if (access(path, X_OK) == 0)
+			return (free_split(paths), path);
+		free(path);
+		i++;
+	}
+	return (free_split(paths), NULL);
+}
+
+char	*get_path(char *cmd, char **envp)
+{
+	int		i;
+	char	**paths;
+
+	if (!cmd || !envp)
+		return (NULL);
+	i = 0;
+	if (ft_strchr(cmd, '/'))
+	{
+		if (access(cmd, F_OK) != 0)
+			exit(127); //clean avant
+		else if (access(cmd, X_OK) != 0)
+			exit(126); //clean avant
+		else
+			return (ft_strdup(cmd));
+	}
+	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
+		i++;
+	if (!envp[i])
+		return (NULL); //pat de PATH dans l'envp
+	paths = ft_split(envp[i] + 5, ':');
+	if (!paths)
+		return (NULL);
+	return (search_in_paths(cmd, paths));
+}
+
+void child_process(t_command *cmd, char **envp, int fd)
+{
+	char *path;
+
+	path = get_path(cmd->argv[0], envp);
+	if (!path) //path not found
+	{
+		//clean_all;
+		ft_putstr_fd("command not found: ", 2);
+		ft_putendl_fd(cmd->argv[0], 2);
+		exit (127);
+	}
+	execve(path, cmd->argv, envp);
+	perror("execve");
+	//clean
+	exit (1);
 }
 
 
@@ -246,12 +311,17 @@ int	execute(t_minishell *data)
 		}
 		if (pid == 0)
 		{
+			if (fd != -1)
+			{
+				dup2(fd, STDIN_FILENO);
+				safe_close(fd);
+			}
 			handle_pipes(pipe_fd, nb_cmd, idx);
 			handle_redir(cmd);
-			
 		}
 		else
 		{
+			safe_close(fd);
 			cmd = cmd->next;
 			idx++;
 		}
