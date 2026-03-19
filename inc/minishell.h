@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:59:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/19 10:36:14 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/19 16:03:00 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <sys/wait.h>
 
 // =================================== USER ===================================
 # include "libft.h"

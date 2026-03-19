@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/19 14:53:07 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/19 16:17:59 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int exec_heredoc(char *limiter)
 	if(pipe(fd) == -1)
 	{
 		perror("pipe");
-		return ;
+		return (-1);
 	}
 	while (1)
 	{
@@ -128,7 +128,7 @@ int exec_heredoc(char *limiter)
 			break ;
 		if (line[ft_strlen(line) - 1] == '\n')
 			line[ft_strlen(line) - 1] = '\0';
-		if (ft_strncmp(limiter, line, ft_strlen(limiter)) == 0 && ft_ft_strncmp(limiter, line, ft_strlen(line)) == 0)
+		if (ft_strncmp(limiter, line, ft_strlen(limiter)) == 0 && ft_strncmp(limiter, line, ft_strlen(line)) == 0)
 			break ;
 		write(fd[1], line, ft_strlen(line));
 		write(fd[1], "\n", 1);
@@ -223,17 +223,17 @@ char	*search_in_paths(char *cmd, char **paths)
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		if (!tmp)
-			return (free_split(paths), NULL);
+			return (NULL);
 		path = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!path)
-			return (free_split(paths), NULL);
+			return (NULL);
 		if (access(path, X_OK) == 0)
-			return (free_split(paths), path);
+			return (path);
 		free(path);
 		i++;
 	}
-	return (free_split(paths), NULL);
+	return (NULL);
 }
 
 char	*get_path(char *cmd, char **envp)
@@ -263,16 +263,16 @@ char	*get_path(char *cmd, char **envp)
 	return (search_in_paths(cmd, paths));
 }
 
-void child_process(t_command *cmd, char **envp, int fd)
+void child_process(t_command *cmd, char **envp)
 {
 	char *path;
 
+	printf("child_process\n");
 	path = get_path(cmd->argv[0], envp);
 	if (!path) //path not found
 	{
 		//clean_all;
-		ft_putstr_fd("command not found: ", 2);
-		ft_putendl_fd(cmd->argv[0], 2);
+		ft_fprintf(2, "command not found: %s\n", cmd->argv[0]);
 		exit (127);
 	}
 	execve(path, cmd->argv, envp);
@@ -283,6 +283,28 @@ void child_process(t_command *cmd, char **envp, int fd)
 
 
 /*========================================================*/
+int wait_process(pid_t pid)
+{
+	pid_t wpid;
+	int status;
+	int retval;
+
+	wpid = 1;
+	retval = 1;
+	while (wpid > 0)
+	{
+		wpid = waitpid(-1, &status, 0);
+		if (wpid == pid)
+		{
+			if (WIFEXITED(status))
+				retval = WEXITSTATUS(status);
+			else
+				retval = 1;
+		}
+	}
+	return (retval);
+}
+
 int	execute(t_minishell *data)
 {
 	int			**pipe_fd;
@@ -292,6 +314,12 @@ int	execute(t_minishell *data)
 	t_command	*cmd;
 	int fd; //pour les heredoc
 
+	// cmd = data->cmd_list;
+	// while (cmd)
+	// {
+	// 	printf("%s\n", cmd->argv[0]);
+	// 	cmd = cmd->next;
+	// }
 	cmd = data->cmd_list;
 	if (!cmd)
 		return (0);
@@ -318,6 +346,7 @@ int	execute(t_minishell *data)
 			}
 			handle_pipes(pipe_fd, nb_cmd, idx);
 			handle_redir(cmd);
+			child_process(cmd, data->env);
 		}
 		else
 		{
@@ -326,5 +355,6 @@ int	execute(t_minishell *data)
 			idx++;
 		}
 	}
-	return (1);
+	clear_pipes(pipe_fd, nb_cmd - 1);
+	return (wait_process(pid));
 }
