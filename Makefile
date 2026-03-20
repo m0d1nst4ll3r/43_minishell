@@ -6,7 +6,7 @@
 #    By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 16:45:41 by rapohlen          #+#    #+#              #
-#    Updated: 2026/03/18 19:22:21 by rapohlen         ###   ########.fr        #
+#    Updated: 2026/03/20 17:32:54 by rapohlen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ CFILES		= main.c \
 			  execute.c \
 			  print_error.c \
 			  util.c \
+			  util_env.c \
 			  cd.c \
 			  pwd.c \
 			  echo.c

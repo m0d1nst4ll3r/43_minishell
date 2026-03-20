@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/18 19:39:21 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:39:24 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	main(int ac, char **av, char **ep)
 	(void)av;
 	if (setup_signal_handlers()) // Memo: restore defaults after fork()
 		error_stop(data.env, ERR_SIGNAL);
-	data.env = build_env(ep); // Memo: problem if entire env couldn't be malloc'd (see unset and export too) - cannot pass NULL to execve
+	data.env = build_env(ep);
 	data.last_return = 0;
 	while (1)
 	{
@@ -52,7 +52,7 @@ int	main(int ac, char **av, char **ep)
 		add_history(data.line);
 		printf("You typed: %s\n", data.line);
 		data.cmd_list = parse(&data);
-		data.last_return = execute(&data);
+		data.last_return = execute(&data); // Memo: Care about passing NULL env to execve in case of failed malloc
 		free(data.line);
 		cleanup_cmd_list(data.cmd_list, 1);
 	}
