@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:09:43 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/13 18:01:39 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:33:11 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ static int	setup_sigint(void)
 	sa.sa_handler = sigint_handler;
 	sa.sa_flags = 0;
 	if (sigemptyset(&sa.sa_mask)
-		|| sigaddset(&sa.sa_mask, SIGINT)
 		|| sigaction(SIGINT, &sa, NULL))
 		return (1);
 	return (0);
