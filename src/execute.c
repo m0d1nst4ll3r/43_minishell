@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/23 11:52:32 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/23 12:39:04 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ int	**create_pipes(int nb_pipes)
 
 void	handle_pipes(int **pipe_fd, int nb_cmd, int idx) /*(CHILD PROCESS)*/
 {
+	//printf("handle pipes\n");
+	if (nb_cmd == 1)
+		return ;
 	if (idx == 0 && nb_cmd > 1)
 	{
 		safe_close(pipe_fd[idx][0]);
@@ -104,6 +107,7 @@ void	handle_pipes(int **pipe_fd, int nb_cmd, int idx) /*(CHILD PROCESS)*/
 		dup2(pipe_fd[idx][1], STDOUT_FILENO);
 		safe_close(pipe_fd[idx][1]);
 	}
+	//printf("STDIN : %d\nSTDOUT : %d\n", STDIN_FILENO, STDOUT_FILENO);
 }
 
 /*========================================================*/
@@ -128,7 +132,7 @@ int exec_heredoc(char *limiter)
 			break ;
 		if (line[ft_strlen(line) - 1] == '\n')
 			line[ft_strlen(line) - 1] = '\0';
-		if (ft_strncmp(limiter, line, ft_strlen(limiter)) == 0 && ft_strncmp(limiter, line, ft_strlen(line)) == 0)
+		if (ft_strncmp(limiter, line, ft_strlen(limiter)) == 0 && ft_strlen(limiter) == ft_strlen(line))
 			break ;
 		write(fd[1], line, ft_strlen(line));
 		write(fd[1], "\n", 1);
@@ -193,6 +197,7 @@ void	handle_redir(t_command *cmd)
 {
 	t_redir	*redir;
 
+	//printf("handle_redir\n");
 	redir = cmd->redir;
 	while (redir)
 	{
@@ -267,7 +272,6 @@ void child_process(t_command *cmd, char **envp)
 {
 	char *path;
 
-	printf("child_process\n");
 	path = get_path(cmd->argv[0], envp);
 	if (!path) //path not found
 	{
@@ -305,6 +309,17 @@ int wait_process(pid_t pid)
 	return (retval);
 }
 
+typedef struct s_exec
+{
+	int **pipe_fd;
+	int nb_cmd;
+	int idx;
+	int heredoc_fd;
+	pid_t pid;
+	t_command *cmd;
+	
+}	t_exec;
+
 int	execute(t_minishell *data)
 {
 	int			**pipe_fd;
@@ -312,38 +327,32 @@ int	execute(t_minishell *data)
 	int			idx;
 	pid_t		pid;
 	t_command	*cmd;
-	int fd; //pour les heredoc
-
-	// cmd = data->cmd_list;
-	// while (cmd)
-	// {
-	// 	printf("%s\n", cmd->argv[0]);
-	// 	cmd = cmd->next;
-	// }
+	int heredoc_fd;
+	
 	cmd = data->cmd_list;
 	if (!cmd)
 		return (0);
 	nb_cmd = count_cmd(cmd);
-	printf("nb_cmd : %d\n", nb_cmd);
 	pipe_fd = create_pipes(nb_cmd - 1);
 	if (!pipe_fd)
 		return (0);
 	idx = 0;
 	while (cmd)
 	{
-		fd = handle_heredoc(cmd->redir);
+		heredoc_fd = handle_heredoc(cmd->redir);
 		pid = fork();
 		if (pid == -1)
 		{
+			perror("fork");
 			clear_pipes(pipe_fd, nb_cmd - 1);
 			return (0);
 		}
 		if (pid == 0)
 		{
-			if (fd != -1)
+			if (heredoc_fd != -1)
 			{
-				dup2(fd, STDIN_FILENO);
-				safe_close(fd);
+				dup2(heredoc_fd, STDIN_FILENO);
+				safe_close(heredoc_fd);
 			}
 			handle_pipes(pipe_fd, nb_cmd, idx);
 			handle_redir(cmd);
@@ -351,7 +360,7 @@ int	execute(t_minishell *data)
 		}
 		else
 		{
-			safe_close(fd);
+			safe_close(heredoc_fd);
 			cmd = cmd->next;
 			idx++;
 		}
