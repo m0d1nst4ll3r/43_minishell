@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/19 16:17:59 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/23 11:52:32 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	count_cmd(t_command *cmd)
 		cmd = cmd->next;
 		i++;
 	}
-	return (1);
+	return (i);
 }
 
 void	safe_close(int fd)
@@ -324,6 +324,7 @@ int	execute(t_minishell *data)
 	if (!cmd)
 		return (0);
 	nb_cmd = count_cmd(cmd);
+	printf("nb_cmd : %d\n", nb_cmd);
 	pipe_fd = create_pipes(nb_cmd - 1);
 	if (!pipe_fd)
 		return (0);
