@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/23 15:02:14 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/23 15:42:47 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,17 +217,17 @@ void	handle_redir(t_command *cmd)
 
 int is_builtin(char *cmd)
 {
-	if (ft_strncmp("echo", cmd, ft_strlen("echo")) && ft_strlen("echo") == ft_strlen(cmd))
+	if (ft_strncmp("echo", cmd, ft_strlen("echo")) == 0 && ft_strlen("echo") == ft_strlen(cmd))
 		return (1);
-	else if (ft_strncmp("cd", cmd, ft_strlen("cd")) && ft_strlen("cd") == ft_strlen(cmd))
+	else if (ft_strncmp("cd", cmd, ft_strlen("cd")) == 0 && ft_strlen("cd") == ft_strlen(cmd))
 		return (1);
-	else if (ft_strncmp("pwd", cmd, ft_strlen("pwd")) && ft_strlen("pwd") == ft_strlen(cmd))
+	else if (ft_strncmp("pwd", cmd, ft_strlen("pwd")) == 0 && ft_strlen("pwd") == ft_strlen(cmd))
 		return (1);
-	else if (ft_strncmp("export", cmd, ft_strlen("export")) && ft_strlen("export") == ft_strlen(cmd))
+	// else if (ft_strncmp("export", cmd, ft_strlen("export")) && ft_strlen("export") == ft_strlen(cmd))
+	// 	return (1);
+	else if (ft_strncmp("unset", cmd, ft_strlen("unset")) == 0 && ft_strlen("unset") == ft_strlen(cmd))
 		return (1);
-	else if (ft_strncmp("unset", cmd, ft_strlen("unset")) && ft_strlen("unset") == ft_strlen(cmd))
-		return (1);
-	else if (ft_strncmp("env", cmd, ft_strlen("env")) && ft_strlen("env") == ft_strlen(cmd))
+	else if (ft_strncmp("env", cmd, ft_strlen("env")) == 0 && ft_strlen("env") == ft_strlen(cmd))
 		return (1);
 	// else if (ft_strncmp("exit", cmd, ft_strlen("exit")) && ft_strlen("exit") == ft_strlen(cmd))
 	// 	return (1);
@@ -241,21 +241,21 @@ int exec_builtin(t_command *cmd, char ***ep)
 	ac = 0;
 	while (cmd->argv[ac])
 		ac++;
-	if (ft_strncmp("echo", cmd->argv[0], ft_strlen("echo")))
+	if (ft_strncmp("echo", cmd->argv[0], ft_strlen("echo") == 0))
 		return (builtin_echo(ac, cmd->argv, *ep));
-	else if (ft_strncmp("cd", cmd->argv[0], ft_strlen("cd")))
+	else if (ft_strncmp("cd", cmd->argv[0], ft_strlen("cd")) == 0)
 		return (builtin_cd(ac, cmd->argv, *ep));
-	else if (ft_strncmp("pwd", cmd->argv[0], ft_strlen("pwd")))
+	else if (ft_strncmp("pwd", cmd->argv[0], ft_strlen("pwd")) == 0)
 		return (builtin_pwd(ac, cmd->argv, *ep));
-	else if (ft_strncmp("export", cmd->argv[0], ft_strlen("export")))
-		return (builtin_export(ac, cmd->argv, ep));
-	else if (ft_strncmp("unset", cmd->argv[0], ft_strlen("unset")))
+	// else if (ft_strncmp("export", cmd->argv[0], ft_strlen("export")) == 0)
+	// 	return (builtin_export(ac, cmd->argv, ep));
+	else if (ft_strncmp("unset", cmd->argv[0], ft_strlen("unset")) == 0)
 		return (builtin_unset(ac, cmd->argv, ep));
-	else if (ft_strncmp("env", cmd->argv[0], ft_strlen("env")))
+	else if (ft_strncmp("env", cmd->argv[0], ft_strlen("env")) == 0)
 		return (builtin_env(ac, cmd->argv, *ep));
 	// else if (ft_strncmp("exit", cmd->argv[0], ft_strlen("exit")))
 	// 	return (1);
-	return (0);
+	return (1);
 }
 
 /*========================================================*/
@@ -388,7 +388,9 @@ int	execute(t_minishell *data)
 	if (!pipe_fd)
 		return (0);
 	if (nb_cmd == 1 && is_builtin(cmd->argv[0]))
-		exec_builtin(cmd, &data->env);
+	{
+		return (exec_builtin(cmd, &data->env));
+	}
 	idx = 0;
 	while (cmd)
 	{

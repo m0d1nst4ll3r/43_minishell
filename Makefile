@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+         #
+#    By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 16:45:41 by rapohlen          #+#    #+#              #
-#    Updated: 2026/03/20 17:32:54 by rapohlen         ###   ########.fr        #
+#    Updated: 2026/03/23 15:29:25 by bdemouge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,10 @@ CFILES		= main.c \
 			  util_env.c \
 			  cd.c \
 			  pwd.c \
-			  echo.c
+			  echo.c \
+			  env.c \
+			  unset.c
+			 # export.c
 SRCDIR		= src
 SRC			= $(addprefix $(SRCDIR)/, $(CFILES))
 
