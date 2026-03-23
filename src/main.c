@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/19 17:39:24 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/23 14:10:53 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	main(int ac, char **av, char **ep)
 		if (!data.line)
 			break ;
 		add_history(data.line);
-		printf("You typed: %s\n", data.line);
+		//printf("You typed: %s\n", data.line);
 		data.cmd_list = parse(&data);
 		data.last_return = execute(&data); // Memo: Care about passing NULL env to execve in case of failed malloc
 		free(data.line);

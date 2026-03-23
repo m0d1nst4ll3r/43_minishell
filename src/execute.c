@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/23 12:42:35 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/23 15:02:14 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,8 +212,57 @@ void	handle_redir(t_command *cmd)
 }
 
 /*========================================================*/
+/* BUILT-IN*/
+/*========================================================*/
+
+int is_builtin(char *cmd)
+{
+	if (ft_strncmp("echo", cmd, ft_strlen("echo")) && ft_strlen("echo") == ft_strlen(cmd))
+		return (1);
+	else if (ft_strncmp("cd", cmd, ft_strlen("cd")) && ft_strlen("cd") == ft_strlen(cmd))
+		return (1);
+	else if (ft_strncmp("pwd", cmd, ft_strlen("pwd")) && ft_strlen("pwd") == ft_strlen(cmd))
+		return (1);
+	else if (ft_strncmp("export", cmd, ft_strlen("export")) && ft_strlen("export") == ft_strlen(cmd))
+		return (1);
+	else if (ft_strncmp("unset", cmd, ft_strlen("unset")) && ft_strlen("unset") == ft_strlen(cmd))
+		return (1);
+	else if (ft_strncmp("env", cmd, ft_strlen("env")) && ft_strlen("env") == ft_strlen(cmd))
+		return (1);
+	// else if (ft_strncmp("exit", cmd, ft_strlen("exit")) && ft_strlen("exit") == ft_strlen(cmd))
+	// 	return (1);
+	return (0);
+}
+
+int exec_builtin(t_command *cmd, char ***ep)
+{
+	int ac;
+
+	ac = 0;
+	while (cmd->argv[ac])
+		ac++;
+	if (ft_strncmp("echo", cmd->argv[0], ft_strlen("echo")))
+		return (builtin_echo(ac, cmd->argv, *ep));
+	else if (ft_strncmp("cd", cmd->argv[0], ft_strlen("cd")))
+		return (builtin_cd(ac, cmd->argv, *ep));
+	else if (ft_strncmp("pwd", cmd->argv[0], ft_strlen("pwd")))
+		return (builtin_pwd(ac, cmd->argv, *ep));
+	else if (ft_strncmp("export", cmd->argv[0], ft_strlen("export")))
+		return (builtin_export(ac, cmd->argv, ep));
+	else if (ft_strncmp("unset", cmd->argv[0], ft_strlen("unset")))
+		return (builtin_unset(ac, cmd->argv, ep));
+	else if (ft_strncmp("env", cmd->argv[0], ft_strlen("env")))
+		return (builtin_env(ac, cmd->argv, *ep));
+	// else if (ft_strncmp("exit", cmd->argv[0], ft_strlen("exit")))
+	// 	return (1);
+	return (0);
+}
+
+/*========================================================*/
 /* CHILD PROCESS*/
 /*========================================================*/
+
+
 
 char	*search_in_paths(char *cmd, char **paths)
 {
@@ -268,18 +317,20 @@ char	*get_path(char *cmd, char **envp)
 	return (search_in_paths(cmd, paths));
 }
 
-void child_process(t_command *cmd, char **envp)
+void child_process(t_command *cmd, char ***envp)
 {
 	char *path;
 
-	path = get_path(cmd->argv[0], envp);
+	if (is_builtin(cmd->argv[0]))
+		exit (exec_builtin(cmd, envp));
+	path = get_path(cmd->argv[0], *envp);
 	if (!path) //path not found
 	{
 		//clean_all;
 		ft_fprintf(2, "command not found: %s\n", cmd->argv[0]);
 		exit (127);
 	}
-	execve(path, cmd->argv, envp);
+	execve(path, cmd->argv, *envp);
 	perror("execve");
 	//clean
 	exit (1);
@@ -336,6 +387,8 @@ int	execute(t_minishell *data)
 	pipe_fd = create_pipes(nb_cmd - 1);
 	if (!pipe_fd)
 		return (0);
+	if (nb_cmd == 1 && is_builtin(cmd->argv[0]))
+		exec_builtin(cmd, &data->env);
 	idx = 0;
 	while (cmd)
 	{
@@ -356,7 +409,7 @@ int	execute(t_minishell *data)
 			}
 			handle_pipes(pipe_fd, nb_cmd, idx);
 			handle_redir(cmd);
-			child_process(cmd, data->env);
+			child_process(cmd, &data->env);
 		}
 		else
 		{
