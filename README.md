@@ -100,3 +100,14 @@ This is where the fun begins
 	- bash has *built-in* shell variables, such as **IFS** - that one contains ' \t\n', which is the list of word-separators used after expansions (not by the lexical parsing of the line)
 	- You can *modify* IFS to *add different word-separators*. Obviously this is cosmic-level absurd complexity and we should not handle this.
 10. An env variable has to be `[a-zA-Z0-9_]+` and it cannot start with a digit
+11. << 'EOF' => does not expand envars inside the heredoc
+	- << EOF => does expand envars (e.g $)
+	- << $HOME => is not the content of the HOME envar, is just $HOME to end the heredoc
+12. exit => uses last_return for its return value, unless exit itself fails (value 2 in tests)
+	- exit qweqwe => not a numeric value, so error 2
+	- exit 31239173917391731973 => larger than long max so error 2
+	- exit 1 1 => more than 1 arg, does not exit, error 1
+	- echo $"HOME" => the $ disappears
+13. Ctrl+C during heredoc #1 stops the entire exec
+14. Heredocs are all done before exec, even with pipes
+15. Restore FDs after built-in exec (since it does not fork)

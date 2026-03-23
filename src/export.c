@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 19:33:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/19 16:10:43 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/23 16:11:16 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,24 @@ static int	is_valid_identifier(char *name, char *str)
 		i++;
 	}
 	return (0);
+}
+
+static char	**get_to_replace(char *envar, char **env)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (env[i])
+	{
+		j = 0;
+		while (envar[j] != '=' && envar[j] == env[i][j])
+			j++;
+		if (envar[j] == env[i][j])
+			return (env + i);
+		i++;
+	}
+	return (NULL);
 }
 
 static int	add_new_envar(char *new_envar, char ***old_env)
@@ -71,7 +89,10 @@ static int	export_envar(char *name, char *envar, char ***ep)
 	}
 	to_replace = get_to_replace(envar, *ep);
 	if (!to_replace)
+	{
+		printf("DEBUG - NO VAR FOUND\n");
 		return (add_new_envar(new_envar, ep));
+	}
 	free(*to_replace);
 	*to_replace = new_envar;
 	return (0);

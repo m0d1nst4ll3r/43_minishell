@@ -6,7 +6,7 @@
 #    By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 16:45:41 by rapohlen          #+#    #+#              #
-#    Updated: 2026/03/20 17:32:54 by rapohlen         ###   ########.fr        #
+#    Updated: 2026/03/23 15:45:50 by rapohlen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,8 @@ CFILES		= main.c \
 			  util_env.c \
 			  cd.c \
 			  pwd.c \
+			  export.c \
+			  unset.c \
 			  echo.c
 SRCDIR		= src
 SRC			= $(addprefix $(SRCDIR)/, $(CFILES))

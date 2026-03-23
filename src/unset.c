@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:20:06 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/19 16:11:38 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/23 16:01:00 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,23 +54,19 @@ static int	unset_envar(char *name, char *to_unset, char ***ep)
 	char	**new_env;
 	char	*to_delete;
 
-	printf("unset %s\n", to_unset);
 	to_delete = get_to_delete(to_unset, *ep);
 	if (!to_delete)
 		return (0);
-	printf("unset: found envar to unset\n");
 	new_env = ft_malloc(sizeof(*new_env) * get_env_size(*ep));
 	if (!new_env)
 	{
 		print_error_builtin(name, ERR_MALLOC);
 		return (1);
 	}
-	printf("unset: unsetting envar now\n");
 	free(to_delete);
 	delete_from_env(to_delete, *ep, new_env);
 	free(*ep);
 	*ep = new_env;
-	printf("unset: successfully unset %s\n", to_unset);
 	return (0);
 }
 
