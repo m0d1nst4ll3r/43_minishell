@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/23 12:39:04 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/23 12:42:35 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,7 +261,7 @@ char	*get_path(char *cmd, char **envp)
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (!envp[i])
-		return (NULL); //pat de PATH dans l'envp
+		return (NULL); //pas de PATH dans l'envp
 	paths = ft_split(envp[i] + 5, ':');
 	if (!paths)
 		return (NULL);
