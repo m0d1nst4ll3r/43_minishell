@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 19:33:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/19 16:10:43 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/23 15:56:21 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static char **get_to_replace(char *envar, char **env)
+{
+	(void)envar;
+	(void)env;
+	return (NULL);
+}
 
 static int	is_valid_identifier(char *name, char *str)
 {

@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/23 15:42:47 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/23 16:13:38 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,8 @@ int	**create_pipes(int nb_pipes)
 	return (pipe_fd);
 }
 
-void	handle_pipes(int **pipe_fd, int nb_cmd, int idx) /*(CHILD PROCESS)*/
+void	handle_pipes(int **pipe_fd, int nb_cmd, int idx)
 {
-	//printf("handle pipes\n");
 	if (nb_cmd == 1)
 		return ;
 	if (idx == 0 && nb_cmd > 1)
@@ -107,7 +106,6 @@ void	handle_pipes(int **pipe_fd, int nb_cmd, int idx) /*(CHILD PROCESS)*/
 		dup2(pipe_fd[idx][1], STDOUT_FILENO);
 		safe_close(pipe_fd[idx][1]);
 	}
-	//printf("STDIN : %d\nSTDOUT : %d\n", STDIN_FILENO, STDOUT_FILENO);
 }
 
 /*========================================================*/
@@ -241,7 +239,7 @@ int exec_builtin(t_command *cmd, char ***ep)
 	ac = 0;
 	while (cmd->argv[ac])
 		ac++;
-	if (ft_strncmp("echo", cmd->argv[0], ft_strlen("echo") == 0))
+	if (ft_strncmp("echo", cmd->argv[0], ft_strlen("echo")) == 0)
 		return (builtin_echo(ac, cmd->argv, *ep));
 	else if (ft_strncmp("cd", cmd->argv[0], ft_strlen("cd")) == 0)
 		return (builtin_cd(ac, cmd->argv, *ep));
