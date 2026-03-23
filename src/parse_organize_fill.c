@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 15:51:44 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/17 17:42:31 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/18 16:05:04 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ int	create_new_cmd(t_command **cmd_list, size_t argv_count, t_command **last)
 {
 	t_command	*new_cmd;
 
-	new_cmd = malloc(sizeof(*new_cmd));
+	new_cmd = ft_malloc(sizeof(*new_cmd));
 	if (!new_cmd)
 		return (0);
-	new_cmd->argv = malloc(sizeof(*new_cmd->argv) * (argv_count + 1));
+	new_cmd->argv = ft_malloc(sizeof(*new_cmd->argv) * (argv_count + 1));
 	if (!new_cmd->argv)
 	{
 		free(new_cmd);
@@ -40,7 +40,7 @@ static int	add_redir(t_command *cmd, t_token *token_list, t_redir **last)
 {
 	t_redir	*new;
 
-	new = malloc(sizeof(*new));
+	new = ft_malloc(sizeof(*new));
 	if (!new)
 		return (0);
 	new->type = (t_redir_type)token_list->type;

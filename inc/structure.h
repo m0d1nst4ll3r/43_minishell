@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:00:56 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/18 16:00:48 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/23 15:08:39 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ typedef enum e_token_type
 	TOKEN_LESSERLESSER,
 	TOKEN_GREATERGREATER,
 	TOKEN_PIPE,
-	TOKEN_WORD,
-	TOKEN_EMPTY
+	TOKEN_WORD
 }	t_token_type;
 
 typedef struct s_token
