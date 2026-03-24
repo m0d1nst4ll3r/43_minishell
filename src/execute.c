@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/24 12:33:36 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/24 14:40:02 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,8 +250,8 @@ int is_builtin(char *cmd)
 		return (1);
 	else if (ft_strncmp("pwd", cmd, ft_strlen("pwd")) == 0 && ft_strlen("pwd") == ft_strlen(cmd))
 		return (1);
-	// else if (ft_strncmp("export", cmd, ft_strlen("export")) && ft_strlen("export") == ft_strlen(cmd))
-	// 	return (1);
+	else if (ft_strncmp("export", cmd, ft_strlen("export")) == 0 && ft_strlen("export") == ft_strlen(cmd))
+		return (1);
 	else if (ft_strncmp("unset", cmd, ft_strlen("unset")) == 0 && ft_strlen("unset") == ft_strlen(cmd))
 		return (1);
 	else if (ft_strncmp("env", cmd, ft_strlen("env")) == 0 && ft_strlen("env") == ft_strlen(cmd))
@@ -264,25 +264,28 @@ int is_builtin(char *cmd)
 int exec_builtin(t_command *cmd, char ***ep)
 {
 	int ac;
+	int retval;
 
 	ac = 0;
+	handle_redir(cmd);
+	retval = 1;
 	while (cmd->argv[ac])
 		ac++;
 	if (ft_strncmp("echo", cmd->argv[0], ft_strlen("echo")) == 0)
-		return (builtin_echo(ac, cmd->argv, *ep));
+		retval = builtin_echo(ac, cmd->argv, *ep);
 	else if (ft_strncmp("cd", cmd->argv[0], ft_strlen("cd")) == 0)
-		return (builtin_cd(ac, cmd->argv, *ep));
+		retval = builtin_cd(ac, cmd->argv, *ep);
 	else if (ft_strncmp("pwd", cmd->argv[0], ft_strlen("pwd")) == 0)
-		return (builtin_pwd(ac, cmd->argv, *ep));
-	// else if (ft_strncmp("export", cmd->argv[0], ft_strlen("export")) == 0)
-	// 	return (builtin_export(ac, cmd->argv, ep));
+		retval = builtin_pwd(ac, cmd->argv, *ep);
+	else if (ft_strncmp("export", cmd->argv[0], ft_strlen("export")) == 0)
+		retval = builtin_export(ac, cmd->argv, ep);
 	else if (ft_strncmp("unset", cmd->argv[0], ft_strlen("unset")) == 0)
-		return (builtin_unset(ac, cmd->argv, ep));
+		retval = builtin_unset(ac, cmd->argv, ep);
 	else if (ft_strncmp("env", cmd->argv[0], ft_strlen("env")) == 0)
-		return (builtin_env(ac, cmd->argv, *ep));
+		retval = builtin_env(ac, cmd->argv, *ep);
 	// else if (ft_strncmp("exit", cmd->argv[0], ft_strlen("exit")))
 	// 	return (1);
-	return (1);
+	return (retval);
 }
 
 /*========================================================*/
@@ -363,7 +366,6 @@ void child_process(t_command *cmd, char ***envp)
 	exit (1);
 }
 
-
 /*========================================================*/
 int wait_process(pid_t pid)
 {
@@ -387,17 +389,6 @@ int wait_process(pid_t pid)
 	return (retval);
 }
 
-// typedef struct s_exec
-// {
-// 	int **pipe_fd;
-// 	int nb_cmd;
-// 	int idx;
-// 	int heredoc_fd;
-// 	pid_t pid;
-// 	t_command *cmd;
-	
-// }	t_exec;
-
 int	execute(t_minishell *data)
 {
 	int			**pipe_fd;
@@ -405,6 +396,8 @@ int	execute(t_minishell *data)
 	int			idx;
 	pid_t		pid;
 	t_command	*cmd;
+	int fd[2];
+	int retval;
 	
 	cmd = data->cmd_list;
 	if (!cmd)
@@ -413,11 +406,18 @@ int	execute(t_minishell *data)
 	pipe_fd = create_pipes(nb_cmd - 1);
 	if (!pipe_fd)
 		return (0);
+	handle_heredoc(data->cmd_list);
 	if (nb_cmd == 1 && is_builtin(cmd->argv[0]))
 	{
-		return (exec_builtin(cmd, &data->env));
+		fd[0] = dup(STDIN_FILENO);
+		fd[1] = dup(STDOUT_FILENO);
+		retval = exec_builtin(cmd, &data->env);
+		dup2(fd[0], STDIN_FILENO);
+		dup2(fd[1], STDOUT_FILENO);
+		safe_close(fd[0]);
+		safe_close(fd[1]);
+		return (retval);
 	}
-	handle_heredoc(data->cmd_list);
 	idx = 0;
 	while (cmd)
 	{
