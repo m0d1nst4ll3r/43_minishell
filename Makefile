@@ -6,7 +6,7 @@
 #    By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 16:45:41 by rapohlen          #+#    #+#              #
-#    Updated: 2026/03/23 15:55:46 by bdemouge         ###   ########.fr        #
+#    Updated: 2026/03/24 11:41:44 by bdemouge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ CFILES		= main.c \
 			  env.c \
 			  unset.c \
 			  export.c
+
 SRCDIR		= src
 SRC			= $(addprefix $(SRCDIR)/, $(CFILES))
 
