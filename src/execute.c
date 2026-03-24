@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/23 16:30:16 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/24 12:33:36 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,34 +139,57 @@ int exec_heredoc(char *limiter)
 	return (fd[0]);
 }
 
-int handle_heredoc(t_redir *redir)
+void handle_heredoc(t_command *cmd)
 {
-	int fd;
+	t_redir *redir;
 
-	fd = -1;
-	while (redir)
+	while (cmd)
 	{
-		if (redir->type == REDIR_HEREDOC)
+		cmd->heredoc_fd = -1;
+		redir = cmd->redir;
+		while (redir)
 		{
-			fd = exec_heredoc(redir->file);
+			if (redir->type == REDIR_HEREDOC)
+			{
+				safe_close(cmd->heredoc_fd);
+				cmd->heredoc_fd	= exec_heredoc(redir->file);
+			}
+			redir = redir->next;
 		}
-		redir = redir->next;
+		cmd = cmd->next;
 	}
-	return (fd);
 }
 
 /*========================================================*/
 /* GESTION REDIR (CHILD PROCESS) !!! PAS DE GESTION DES ERREURS !!!*/
 /*========================================================*/
-void	handle_redir_in(char *file)
+
+int check_heredoc(t_redir *redir) //verifier si il y a un heredoc apres la redirection
+{
+	while (redir)
+	{
+		if (redir->type == REDIR_HEREDOC)
+			return (1);
+		redir = redir->next;
+	}
+	return (0);
+}
+
+void	handle_redir_in(t_redir *redir, char *file)
 {
 	int	fd;
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
+	{
+		perror(file);
 		return ; //(clean + exit avec le bon code)
-	dup2(fd, STDIN_FILENO);
-	close(fd);
+	}
+	if (!check_heredoc(redir))
+	{
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+	}
 }
 
 void	handle_redir_out(char *file)
@@ -175,7 +198,10 @@ void	handle_redir_out(char *file)
 
 	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (fd == -1)
+	{
+		perror(file);
 		return ; //(clean + exit avec le bon code)
+	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
@@ -186,7 +212,10 @@ void	handle_redir_append(char *file)
 
 	fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0666);
 	if (fd == -1)
+	{
+		perror(file);
 		return ; //(clean + exit avec le bon code)
+	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
@@ -200,7 +229,7 @@ void	handle_redir(t_command *cmd)
 	while (redir)
 	{
 		if (redir->type == REDIR_IN)
-			handle_redir_in(redir->file);
+			handle_redir_in(redir, redir->file);
 		else if (redir->type == REDIR_OUT)
 			handle_redir_out(redir->file);
 		else if (redir->type == REDIR_APPEND)
@@ -358,16 +387,16 @@ int wait_process(pid_t pid)
 	return (retval);
 }
 
-typedef struct s_exec
-{
-	int **pipe_fd;
-	int nb_cmd;
-	int idx;
-	int heredoc_fd;
-	pid_t pid;
-	t_command *cmd;
+// typedef struct s_exec
+// {
+// 	int **pipe_fd;
+// 	int nb_cmd;
+// 	int idx;
+// 	int heredoc_fd;
+// 	pid_t pid;
+// 	t_command *cmd;
 	
-}	t_exec;
+// }	t_exec;
 
 int	execute(t_minishell *data)
 {
@@ -376,7 +405,6 @@ int	execute(t_minishell *data)
 	int			idx;
 	pid_t		pid;
 	t_command	*cmd;
-	int heredoc_fd;
 	
 	cmd = data->cmd_list;
 	if (!cmd)
@@ -389,10 +417,10 @@ int	execute(t_minishell *data)
 	{
 		return (exec_builtin(cmd, &data->env));
 	}
+	handle_heredoc(data->cmd_list);
 	idx = 0;
 	while (cmd)
 	{
-		heredoc_fd = handle_heredoc(cmd->redir);
 		pid = fork();
 		if (pid == -1)
 		{
@@ -402,18 +430,18 @@ int	execute(t_minishell *data)
 		}
 		if (pid == 0)
 		{
-			if (heredoc_fd != -1)
-			{
-				dup2(heredoc_fd, STDIN_FILENO);
-				safe_close(heredoc_fd);
-			}
 			handle_pipes(pipe_fd, nb_cmd, idx);
+			if (cmd->heredoc_fd != -1)
+			{
+				dup2(cmd->heredoc_fd, STDIN_FILENO);
+				safe_close(cmd->heredoc_fd);
+			}
 			handle_redir(cmd);
 			child_process(cmd, &data->env);
 		}
 		else
 		{
-			safe_close(heredoc_fd);
+			safe_close(cmd->heredoc_fd);
 			cmd = cmd->next;
 			idx++;
 		}

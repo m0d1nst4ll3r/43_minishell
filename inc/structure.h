@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:00:56 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/23 15:11:20 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/24 12:08:38 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_command
 {
 	char				**argv;
 	t_redir				*redir;
+	int 				heredoc_fd;
 	struct s_command	*next;
 }	t_command;
 
