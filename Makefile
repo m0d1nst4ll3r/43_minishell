@@ -6,7 +6,7 @@
 #    By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 16:45:41 by rapohlen          #+#    #+#              #
-#    Updated: 2026/03/24 11:41:44 by bdemouge         ###   ########.fr        #
+#    Updated: 2026/03/25 15:03:52 by bdemouge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,9 @@ CFILES		= main.c \
 			  parse_organize.c \
 			  parse_organize_fill.c \
 			  execute.c \
+			  exec_utils.c \
+			  exec_pipes.c \
+			  exec_heredoc.c \
 			  print_error.c \
 			  util.c \
 			  util_env.c \

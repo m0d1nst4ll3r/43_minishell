@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prototype.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/19 14:57:18 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/25 14:42:19 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,12 @@ int				create_new_cmd(t_command **cmd_list, size_t argv_count,
 //
 //	Executor
 //
-
+int				count_cmd(t_command *cmd);
+void			safe_close(int *fd);
+void			clear_pipes(int **pipe_fd, int nb_pipes);
+int				**create_pipes(int nb_pipes);
+void			handle_pipes(int **pipe_fd, int nb_cmd, int idx);
+void 			handle_heredoc(t_command *cmd);
 //
 //	Built-in
 //

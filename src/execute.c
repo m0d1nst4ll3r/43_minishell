@@ -6,165 +6,17 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/24 14:40:02 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/25 16:02:29 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* UTILS */
-/*========================================================*/
-int	count_cmd(t_command *cmd)
-{
-	int	i;
-
-	i = 0;
-	while (cmd)
-	{
-		cmd = cmd->next;
-		i++;
-	}
-	return (i);
-}
-
-void	safe_close(int fd)
-{
-	if (fd == -1)
-		return ;
-	close(fd);
-	fd = -1;
-}
-
-/*========================================================*/
-/* GESTION PIPES */
-/*========================================================*/
-void	clear_pipes(int **pipe_fd, int nb_pipes)
-{
-	int	i;
-
-	i = 0;
-	while (i < nb_pipes)
-	{
-		safe_close(pipe_fd[i][0]);
-		safe_close(pipe_fd[i][1]);
-		free(pipe_fd[i]);
-		i++;
-	}
-	free(pipe_fd);
-}
-int	**create_pipes(int nb_pipes)
-{
-	int	**pipe_fd;
-	int	i;
-
-	pipe_fd = malloc(sizeof(int *) * nb_pipes);
-	if (!pipe_fd)
-		return (perror("malloc"), NULL); /* gerer erreur*/
-	i = 0;
-	while (i < nb_pipes)
-	{
-		pipe_fd[i] = malloc(sizeof(int) * 2);
-		if (!pipe_fd[i])
-		{
-			clear_pipes(pipe_fd, i);
-			return (NULL);
-		}
-		pipe_fd[i][0] = -1;
-		pipe_fd[i][1] = -1;
-		if (pipe(pipe_fd[i]) == -1)
-		{
-			clear_pipes(pipe_fd, i);
-			return (NULL);
-		}
-		i++;
-	}
-	return (pipe_fd);
-}
-
-void	handle_pipes(int **pipe_fd, int nb_cmd, int idx)
-{
-	if (nb_cmd == 1)
-		return ;
-	if (idx == 0 && nb_cmd > 1)
-	{
-		safe_close(pipe_fd[idx][0]);
-		dup2(pipe_fd[idx][1], STDOUT_FILENO);
-		safe_close(pipe_fd[idx][1]);
-	}
-	else if (idx == nb_cmd - 1)
-	{
-		safe_close(pipe_fd[idx - 1][1]);
-		dup2(pipe_fd[idx - 1][0], STDIN_FILENO);
-		safe_close(pipe_fd[idx - 1][0]);
-	}
-	else
-	{
-		safe_close(pipe_fd[idx - 1][1]);
-		safe_close(pipe_fd[idx][0]);
-		dup2(pipe_fd[idx - 1][0], STDIN_FILENO);
-		safe_close(pipe_fd[idx - 1][0]);
-		dup2(pipe_fd[idx][1], STDOUT_FILENO);
-		safe_close(pipe_fd[idx][1]);
-	}
-}
-
-/*========================================================*/
-/* GESTION HEREDOC (PARENT PROCESS) !!! PAS DE GESTION DES ERREURS !!!*/
-/*========================================================*/
-
-int exec_heredoc(char *limiter)
-{
-	int fd[2];
-	char *line;
-
-	if(pipe(fd) == -1)
-	{
-		perror("pipe");
-		return (-1);
-	}
-	while (1)
-	{
-		write(1, ">", 1);
-		line = get_next_line(0);
-		if (line == NULL)
-			break ;
-		if (line[ft_strlen(line) - 1] == '\n')
-			line[ft_strlen(line) - 1] = '\0';
-		if (ft_strncmp(limiter, line, ft_strlen(limiter)) == 0 && ft_strlen(limiter) == ft_strlen(line))
-			break ;
-		write(fd[1], line, ft_strlen(line));
-		write(fd[1], "\n", 1);
-	}
-	close(fd[1]);
-	return (fd[0]);
-}
-
-void handle_heredoc(t_command *cmd)
-{
-	t_redir *redir;
-
-	while (cmd)
-	{
-		cmd->heredoc_fd = -1;
-		redir = cmd->redir;
-		while (redir)
-		{
-			if (redir->type == REDIR_HEREDOC)
-			{
-				safe_close(cmd->heredoc_fd);
-				cmd->heredoc_fd	= exec_heredoc(redir->file);
-			}
-			redir = redir->next;
-		}
-		cmd = cmd->next;
-	}
-}
-
 /*========================================================*/
 /* GESTION REDIR (CHILD PROCESS) !!! PAS DE GESTION DES ERREURS !!!*/
 /*========================================================*/
 
-int check_heredoc(t_redir *redir) //verifier si il y a un heredoc apres la redirection
+int check_heredoc(t_redir *redir) /*verifier si il y a un heredoc apres la redirection*/
 {
 	while (redir)
 	{
@@ -224,7 +76,6 @@ void	handle_redir(t_command *cmd)
 {
 	t_redir	*redir;
 
-	//printf("handle_redir\n");
 	redir = cmd->redir;
 	while (redir)
 	{
@@ -374,7 +225,7 @@ int wait_process(pid_t pid)
 	int retval;
 
 	wpid = 1;
-	retval = 1;
+	retval = 130;
 	while (wpid > 0)
 	{
 		wpid = waitpid(-1, &status, 0);
@@ -382,8 +233,6 @@ int wait_process(pid_t pid)
 		{
 			if (WIFEXITED(status))
 				retval = WEXITSTATUS(status);
-			else
-				retval = 1;
 		}
 	}
 	return (retval);
@@ -414,8 +263,8 @@ int	execute(t_minishell *data)
 		retval = exec_builtin(cmd, &data->env);
 		dup2(fd[0], STDIN_FILENO);
 		dup2(fd[1], STDOUT_FILENO);
-		safe_close(fd[0]);
-		safe_close(fd[1]);
+		safe_close(&fd[0]);
+		safe_close(&fd[1]);
 		return (retval);
 	}
 	idx = 0;
@@ -434,14 +283,15 @@ int	execute(t_minishell *data)
 			if (cmd->heredoc_fd != -1)
 			{
 				dup2(cmd->heredoc_fd, STDIN_FILENO);
-				safe_close(cmd->heredoc_fd);
+				safe_close(&cmd->heredoc_fd);
 			}
 			handle_redir(cmd);
+			clear_pipes(pipe_fd, nb_cmd - 1);
 			child_process(cmd, &data->env);
 		}
 		else
 		{
-			safe_close(cmd->heredoc_fd);
+			safe_close(&cmd->heredoc_fd);
 			cmd = cmd->next;
 			idx++;
 		}

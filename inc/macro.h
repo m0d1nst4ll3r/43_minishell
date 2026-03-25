@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   macro.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:04:36 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/19 14:49:31 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/25 14:36:59 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # define ERR_UNFQUOTE	"unexpected EOF while looking for matching `''"
 # define ERR_UNFDQUOTE	"unexpected EOF while looking for matching `\"'"
 # define ERR_SYNTAX		"syntax error"
+# define ERR_PIPE       "pipe error"
 
 # define ERR_CDARGS		"too many arguments"
 # define ERR_CDHOME		"HOME not set"
