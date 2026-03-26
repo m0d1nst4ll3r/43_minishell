@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/26 12:19:41 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/26 12:39:25 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 //
 char			**build_env(char **envp);
 int				setup_signal_handlers(void);
+int				reset_signal_handlers(void);
 
 //
 //	Main loop
