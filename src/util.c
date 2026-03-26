@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:37:41 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/19 14:21:39 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/26 11:59:13 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,4 @@ void	*ft_malloc(size_t size)
 	if (!p)
 		print_error(ERR_MALLOC);
 	return (p);
-}
-
-size_t	get_uchar_len(unsigned char u)
-{
-	if (u < 10)
-		return (1);
-	if (u < 100)
-		return (2);
-	return (3);
 }

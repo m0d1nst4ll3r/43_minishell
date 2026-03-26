@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:21:20 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/19 14:21:39 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/26 12:20:48 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,10 @@ size_t	get_env_size(char **env)
 int	is_envar_char(char c)
 {
 	return (c == '_' || ft_isdigit(c) || ft_islower(c) || ft_isupper(c));
+}
+
+int	is_valid_envar_syntax(char *line)
+{
+	return (line[0] == '$' && (line[1] == '?'
+			|| (!ft_isdigit(line[1]) && is_envar_char(line[1]))));
 }

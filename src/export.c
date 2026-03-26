@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 19:33:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/23 16:11:16 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/26 11:49:10 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,5 @@ int	builtin_export(int ac, char **av, char ***ep)
 		}
 		i++;
 	}
-	return (0);
+	return (ret);
 }

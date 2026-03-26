@@ -6,11 +6,30 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:02:05 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/17 16:37:35 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/26 12:16:03 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	fill_word(t_minishell *d, size_t *i, char *word)
+{
+	t_parse_state	state;
+	size_t			len;
+
+	state = STATE_NONE;
+	len = 0;
+	while (!is_end_of_word(d->line[*i], state))
+	{
+		if ((d->line[*i] == '\'' && state != STATE_DQUOTE)
+			|| (d->line[*i] == '"' && state != STATE_QUOTE))
+			update_state(d->line[*i], &state, i);
+		else if (state != STATE_QUOTE && is_valid_envar_syntax(d->line + *i))
+			*i += write_expanded_envar(d->line + *i, d, &len, word);
+		else
+			word[len++] = d->line[(*i)++];
+	}
+}
 
 static int	get_token_word(t_minishell *d, size_t *i, t_token *new)
 {
