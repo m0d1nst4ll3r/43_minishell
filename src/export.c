@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 19:33:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/24 11:38:41 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/26 13:18:04 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,5 @@ int	builtin_export(int ac, char **av, char ***ep)
 		}
 		i++;
 	}
-	return (0);
+	return (ret);
 }

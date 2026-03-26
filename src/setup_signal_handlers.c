@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:09:43 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/20 17:33:11 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/26 12:37:40 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,33 +21,31 @@ static void	sigint_handler(int signum)
 	rl_redisplay();
 }
 
-static int	setup_sigint(void)
+int	reset_signal_handlers(void)
 {
 	struct sigaction	sa;
 
-	sa.sa_handler = sigint_handler;
-	sa.sa_flags = 0;
-	if (sigemptyset(&sa.sa_mask)
-		|| sigaction(SIGINT, &sa, NULL))
+	ft_memset(&sa, 0, sizeof(sa));
+	if (sigemptyset(&sa.sa_mask))
 		return (1);
-	return (0);
-}
-
-static int	setup_sigquit(void)
-{
-	struct sigaction	sa;
-
-	sa.sa_flags = 0;
-	sa.sa_handler = SIG_IGN;
-	if (sigemptyset(&sa.sa_mask)
-		|| sigaction(SIGQUIT, &sa, NULL))
+	sa.sa_handler = SIG_DFL;
+	if (sigaction(SIGQUIT, &sa, NULL) || sigaction(SIGINT, &sa, NULL))
 		return (1);
 	return (0);
 }
 
 int	setup_signal_handlers(void)
 {
-	if (setup_sigquit() || setup_sigint())
+	struct sigaction	sa;
+
+	ft_memset(&sa, 0, sizeof(sa));
+	if (sigemptyset(&sa.sa_mask))
+		return (1);
+	sa.sa_handler = SIG_IGN;
+	if (sigaction(SIGQUIT, &sa, NULL))
+		return (1);
+	sa.sa_handler = sigint_handler;
+	if (sigaction(SIGINT, &sa, NULL))
 		return (1);
 	return (0);
 }

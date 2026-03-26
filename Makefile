@@ -6,7 +6,11 @@
 #    By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 16:45:41 by rapohlen          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2026/03/25 15:03:52 by bdemouge         ###   ########.fr        #
+=======
+#    Updated: 2026/03/26 12:19:57 by rapohlen         ###   ########.fr        #
+>>>>>>> origin/master
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,16 +20,21 @@ CFILES		= main.c \
 			  setup_signal_handlers.c \
 			  cleanup.c \
 			  parse.c \
+			  parse_util.c \
+			  parse_util_len.c \
+			  parse_util_write.c \
 			  parse_tokenize.c \
-			  parse_tokenize_fill.c \
 			  parse_tokenize_len.c \
-			  parse_tokenize_util.c \
 			  parse_organize.c \
 			  parse_organize_fill.c \
 			  execute.c \
+<<<<<<< HEAD
 			  exec_utils.c \
 			  exec_pipes.c \
 			  exec_heredoc.c \
+=======
+			  heredoc_expand_line.c \
+>>>>>>> origin/master
 			  print_error.c \
 			  util.c \
 			  util_env.c \
