@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_util_write.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 11:55:45 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/26 12:16:27 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/26 14:07:01 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ size_t	write_expanded_envar(char *line, t_minishell *d, size_t *len,
 	size_t	i;
 
 	i = 1;
+	key_len = 0;
 	if (line[i] == '?')
 	{
 		write_last_return(d->last_return, word, len);

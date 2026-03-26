@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/26 13:18:13 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/26 14:29:35 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int				builtin_pwd(int ac, char **av, char **ep);
 int				builtin_env(int ac, char **av, char **ep);
 int				builtin_export(int ac, char **av, char ***ep);
 int				builtin_unset(int ac, char **av, char ***ep);
+int 			builtin_exit(int ac, char **argv, t_minishell *data);
 
 //
 //	Util
@@ -85,5 +86,6 @@ void			print_error_builtin_file(char *name, char *file, char *err_str);
 void			cleanup_env(char **env);
 void			cleanup_token_list(t_token *token_list, int clean_contents);
 void			cleanup_cmd_list(t_command *cmd_list, int clean_contents);
+void			cleanup_prog(char **env);
 
 #endif

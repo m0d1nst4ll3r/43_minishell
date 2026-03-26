@@ -6,13 +6,13 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/24 11:39:39 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/26 14:28:59 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	cleanup_prog(char **env)
+void	cleanup_prog(char **env)
 {
 	cleanup_env(env);
 	rl_clear_history();

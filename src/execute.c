@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/25 16:02:29 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/26 14:52:01 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,12 @@ int is_builtin(char *cmd)
 		return (1);
 	else if (ft_strncmp("env", cmd, ft_strlen("env")) == 0 && ft_strlen("env") == ft_strlen(cmd))
 		return (1);
-	// else if (ft_strncmp("exit", cmd, ft_strlen("exit")) && ft_strlen("exit") == ft_strlen(cmd))
-	// 	return (1);
+	else if (ft_strncmp("exit", cmd, ft_strlen("exit")) == 0 && ft_strlen("exit") == ft_strlen(cmd))
+		return (1);
 	return (0);
 }
 
-int exec_builtin(t_command *cmd, char ***ep)
+int exec_builtin(t_minishell *data, t_command *cmd, char ***ep)
 {
 	int ac;
 	int retval;
@@ -134,8 +134,8 @@ int exec_builtin(t_command *cmd, char ***ep)
 		retval = builtin_unset(ac, cmd->argv, ep);
 	else if (ft_strncmp("env", cmd->argv[0], ft_strlen("env")) == 0)
 		retval = builtin_env(ac, cmd->argv, *ep);
-	// else if (ft_strncmp("exit", cmd->argv[0], ft_strlen("exit")))
-	// 	return (1);
+	else if (ft_strncmp("exit", cmd->argv[0], ft_strlen("exit")) == 0)
+	 	retval = builtin_exit(ac, cmd->argv, data);
 	return (retval);
 }
 
@@ -198,12 +198,12 @@ char	*get_path(char *cmd, char **envp)
 	return (search_in_paths(cmd, paths));
 }
 
-void child_process(t_command *cmd, char ***envp)
+void child_process(t_minishell *data, t_command *cmd, char ***envp)
 {
 	char *path;
 
 	if (is_builtin(cmd->argv[0]))
-		exit (exec_builtin(cmd, envp));
+		exit (exec_builtin(data, cmd, envp));
 	path = get_path(cmd->argv[0], *envp);
 	if (!path) //path not found
 	{
@@ -260,7 +260,7 @@ int	execute(t_minishell *data)
 	{
 		fd[0] = dup(STDIN_FILENO);
 		fd[1] = dup(STDOUT_FILENO);
-		retval = exec_builtin(cmd, &data->env);
+		retval = exec_builtin(data, cmd, &data->env);
 		dup2(fd[0], STDIN_FILENO);
 		dup2(fd[1], STDOUT_FILENO);
 		safe_close(&fd[0]);
@@ -287,7 +287,7 @@ int	execute(t_minishell *data)
 			}
 			handle_redir(cmd);
 			clear_pipes(pipe_fd, nb_cmd - 1);
-			child_process(cmd, &data->env);
+			child_process(data, cmd, &data->env);
 		}
 		else
 		{
