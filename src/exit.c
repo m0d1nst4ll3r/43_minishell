@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 11:38:07 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/03/26 15:00:13 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/26 15:35:22 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void print_error_exit(char *arg, char *err_msg)
         ft_fprintf(2, "%s: exit: %s\n", NAME, err_msg);
 }
 
-int is_numeric(char *str)
+static int is_numeric(char *str)
 {
     int i;
 
@@ -42,18 +42,24 @@ static int check_overflow(long result, int digit, int neg)
 {
     if (neg == 1)
     {
-        if (result > (LONG_MAX - digit) / 10)
+        if (result > (LONG_MAX / 10))
+            return (1);
+        result *= 10;
+        if (result > LONG_MAX - digit)
             return (1);
     }
     else if (neg == -1)
     {
-        if (result > -(LONG_MIN + digit) / 10)
+        if (result < (LONG_MIN / 10))
+            return (1);
+        result *= 10;
+        if (result < LONG_MIN + digit)
             return (1);
     }
     return (0);
 }
 
-long	atol_safe(char *str)
+static long	atol_safe(char *str)
 {
 	int 	i;
 	int 	n;
@@ -76,10 +82,10 @@ long	atol_safe(char *str)
             print_error_exit(str, "numeric argument required");
             return (2);
         }
-		result = result * 10 + (str[i] - 48);
+		result = result * 10 + ((str[i] - 48) * n);
 		i++;
 	}
-	return (result * n);
+	return (result);
 }
 
 void exit_prog(t_minishell *data, int status)
