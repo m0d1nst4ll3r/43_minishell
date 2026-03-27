@@ -6,12 +6,14 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:59:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/27 12:10:42 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/27 17:00:49 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+extern int	g_signal;
 
 // ================================== SYSTEM ==================================
 # include <errno.h>

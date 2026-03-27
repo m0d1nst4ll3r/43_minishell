@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/27 12:11:05 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/27 17:01:05 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ int	main(int ac, char **av, char **ep)
 		error_stop(data.env, ERR_SIGNAL);
 	data.env = build_env(ep);
 	data.last_return = 0;
+	rl_event_hook = event_hook;
 	while (1)
 	{
+		g_signal = 0;
 		data.line = readline(PROMPT);
 		if (!data.line)
 			break ;

@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/27 15:06:39 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/27 17:00:56 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 char			**build_env(char **envp);
 int				setup_signal_handlers(void);
 int				reset_signal_handlers(void);
+int				event_hook(void);
 
 //
 //	Main loop

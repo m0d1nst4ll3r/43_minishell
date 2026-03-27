@@ -6,19 +6,30 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:09:43 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/27 12:10:54 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/27 17:01:14 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	g_signal = 0;
+
 static void	sigint_handler(int signum)
 {
-	(void)signum;
-	rl_replace_line("", 1);
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_redisplay();
+	g_signal = signum;
+}
+
+int	event_hook(void)
+{
+	if (g_signal == SIGINT)
+	{
+		g_signal = 0;
+		rl_replace_line("", 1);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	return (0);
 }
 
 int	reset_signal_handlers(void)
