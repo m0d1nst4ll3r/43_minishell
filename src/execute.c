@@ -6,138 +6,11 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/26 14:52:01 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/27 14:21:41 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*========================================================*/
-/* GESTION REDIR (CHILD PROCESS) !!! PAS DE GESTION DES ERREURS !!!*/
-/*========================================================*/
-
-int check_heredoc(t_redir *redir) /*verifier si il y a un heredoc apres la redirection*/
-{
-	while (redir)
-	{
-		if (redir->type == REDIR_HEREDOC)
-			return (1);
-		redir = redir->next;
-	}
-	return (0);
-}
-
-void	handle_redir_in(t_redir *redir, char *file)
-{
-	int	fd;
-
-	fd = open(file, O_RDONLY);
-	if (fd == -1)
-	{
-		perror(file);
-		return ; //(clean + exit avec le bon code)
-	}
-	if (!check_heredoc(redir))
-	{
-		dup2(fd, STDIN_FILENO);
-		close(fd);
-	}
-}
-
-void	handle_redir_out(char *file)
-{
-	int	fd;
-
-	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	if (fd == -1)
-	{
-		perror(file);
-		return ; //(clean + exit avec le bon code)
-	}
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
-}
-
-void	handle_redir_append(char *file)
-{
-	int	fd;
-
-	fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0666);
-	if (fd == -1)
-	{
-		perror(file);
-		return ; //(clean + exit avec le bon code)
-	}
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
-}
-
-void	handle_redir(t_command *cmd)
-{
-	t_redir	*redir;
-
-	redir = cmd->redir;
-	while (redir)
-	{
-		if (redir->type == REDIR_IN)
-			handle_redir_in(redir, redir->file);
-		else if (redir->type == REDIR_OUT)
-			handle_redir_out(redir->file);
-		else if (redir->type == REDIR_APPEND)
-			handle_redir_append(redir->file);
-		redir = redir->next;
-	}
-}
-
-/*========================================================*/
-/* BUILT-IN*/
-/*========================================================*/
-
-int is_builtin(char *cmd)
-{
-	if (ft_strncmp("echo", cmd, ft_strlen("echo")) == 0 && ft_strlen("echo") == ft_strlen(cmd))
-		return (1);
-	else if (ft_strncmp("cd", cmd, ft_strlen("cd")) == 0 && ft_strlen("cd") == ft_strlen(cmd))
-		return (1);
-	else if (ft_strncmp("pwd", cmd, ft_strlen("pwd")) == 0 && ft_strlen("pwd") == ft_strlen(cmd))
-		return (1);
-	else if (ft_strncmp("export", cmd, ft_strlen("export")) == 0 && ft_strlen("export") == ft_strlen(cmd))
-		return (1);
-	else if (ft_strncmp("unset", cmd, ft_strlen("unset")) == 0 && ft_strlen("unset") == ft_strlen(cmd))
-		return (1);
-	else if (ft_strncmp("env", cmd, ft_strlen("env")) == 0 && ft_strlen("env") == ft_strlen(cmd))
-		return (1);
-	else if (ft_strncmp("exit", cmd, ft_strlen("exit")) == 0 && ft_strlen("exit") == ft_strlen(cmd))
-		return (1);
-	return (0);
-}
-
-int exec_builtin(t_minishell *data, t_command *cmd, char ***ep)
-{
-	int ac;
-	int retval;
-
-	ac = 0;
-	handle_redir(cmd);
-	retval = 1;
-	while (cmd->argv[ac])
-		ac++;
-	if (ft_strncmp("echo", cmd->argv[0], ft_strlen("echo")) == 0)
-		retval = builtin_echo(ac, cmd->argv, *ep);
-	else if (ft_strncmp("cd", cmd->argv[0], ft_strlen("cd")) == 0)
-		retval = builtin_cd(ac, cmd->argv, *ep);
-	else if (ft_strncmp("pwd", cmd->argv[0], ft_strlen("pwd")) == 0)
-		retval = builtin_pwd(ac, cmd->argv, *ep);
-	else if (ft_strncmp("export", cmd->argv[0], ft_strlen("export")) == 0)
-		retval = builtin_export(ac, cmd->argv, ep);
-	else if (ft_strncmp("unset", cmd->argv[0], ft_strlen("unset")) == 0)
-		retval = builtin_unset(ac, cmd->argv, ep);
-	else if (ft_strncmp("env", cmd->argv[0], ft_strlen("env")) == 0)
-		retval = builtin_env(ac, cmd->argv, *ep);
-	else if (ft_strncmp("exit", cmd->argv[0], ft_strlen("exit")) == 0)
-	 	retval = builtin_exit(ac, cmd->argv, data);
-	return (retval);
-}
 
 /*========================================================*/
 /* CHILD PROCESS*/
@@ -279,6 +152,11 @@ int	execute(t_minishell *data)
 		}
 		if (pid == 0)
 		{
+			if (reset_signal_handlers())
+			{
+				clear_pipes(pipe_fd, nb_cmd - 1);
+				exit_prog(data, 1);
+			}
 			handle_pipes(pipe_fd, nb_cmd, idx);
 			if (cmd->heredoc_fd != -1)
 			{

@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/26 14:29:35 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/27 14:20:51 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ void			clear_pipes(int **pipe_fd, int nb_pipes);
 int				**create_pipes(int nb_pipes);
 void			handle_pipes(int **pipe_fd, int nb_cmd, int idx);
 void 			handle_heredoc(t_command *cmd);
-
+int 			is_builtin(char *cmd);
+int 			exec_builtin(t_minishell *data, t_command *cmd, char ***ep);
+void			handle_redir(t_command *cmd);
 // Heredoc
 char			*expand_line(char *line, t_minishell *d);
 
@@ -78,6 +80,7 @@ void			get_expanded_envar_len(char *line, t_minishell *d, size_t *i,
 					size_t *len);
 size_t			write_expanded_envar(char *line, t_minishell *d, size_t *len,
 					char *word);
+void 			exit_prog(t_minishell *data, int status);
 // Error
 void			print_error(char *err_str);
 void			print_error_builtin(char *name, char *err_str);

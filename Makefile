@@ -6,7 +6,7 @@
 #    By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 16:45:41 by rapohlen          #+#    #+#              #
-#    Updated: 2026/03/26 14:27:51 by bdemouge         ###   ########.fr        #
+#    Updated: 2026/03/27 14:21:08 by bdemouge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,8 @@ CFILES		= main.c \
 			  execute.c \
 			  exec_utils.c \
 			  exec_pipes.c \
+			  exec_builtin.c \
+			  exec_redir.c \
 			  exec_heredoc.c \
 			  heredoc_expand_line.c \
 			  print_error.c \
