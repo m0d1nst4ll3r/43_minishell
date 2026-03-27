@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/27 16:49:08 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/27 17:12:06 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,11 @@ int	main(int ac, char **av, char **ep)
 	rl_event_hook = event_hook;
 	while (1)
 	{
-		g_signal = 0;
+		if (g_signal == SIGINT)
+		{
+			write(1, "\n", 1);
+			g_signal = 0;
+		}
 		data.line = readline(PROMPT);
 		if (!data.line)
 			break ;
