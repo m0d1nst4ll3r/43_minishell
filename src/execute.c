@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/27 15:02:44 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/27 17:11:43 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,9 @@ int wait_process(pid_t pid)
 	return (retval);
 }
 
+/// @brief 
+/// @param data 
+/// @return 
 int	execute(t_minishell *data)
 {
 	int			**pipe_fd;
