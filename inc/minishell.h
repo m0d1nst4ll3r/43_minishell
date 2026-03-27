@@ -6,12 +6,14 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:59:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/13 17:21:01 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/03/27 16:46:59 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+extern int	g_signal;
 
 // ================================== SYSTEM ==================================
 # include <unistd.h>
