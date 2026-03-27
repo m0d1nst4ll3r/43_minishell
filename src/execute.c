@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/27 14:21:41 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/27 15:02:44 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int	execute(t_minishell *data)
 	pipe_fd = create_pipes(nb_cmd - 1);
 	if (!pipe_fd)
 		return (0);
-	handle_heredoc(data->cmd_list);
+	handle_heredoc(data);
 	if (nb_cmd == 1 && is_builtin(cmd->argv[0]))
 	{
 		fd[0] = dup(STDIN_FILENO);

@@ -6,16 +6,17 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:39:51 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/03/27 14:24:02 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/27 15:10:24 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int exec_heredoc(char *limiter)
+static int exec_heredoc(char *limiter, t_minishell *data)
 {
 	int fd[2];
 	char *line;
+	char *expand = NULL;
 
 	if(pipe(fd) == -1)
 	{
@@ -32,17 +33,26 @@ static int exec_heredoc(char *limiter)
 			line[ft_strlen(line) - 1] = '\0';
 		if (ft_strncmp(limiter, line, ft_strlen(limiter)) == 0 && ft_strlen(limiter) == ft_strlen(line))
 			break ;
+		expand = expand_line(line, data);
+		if (expand)
+		{
+			free(line);
+			line = expand;
+		}
 		write(fd[1], line, ft_strlen(line));
 		write(fd[1], "\n", 1);
+		free(line);
 	}
 	close(fd[1]);
 	return (fd[0]);
 }
 
-void handle_heredoc(t_command *cmd)
+void handle_heredoc(t_minishell *data)
 {
+	t_command *cmd;
 	t_redir *redir;
 
+	cmd = data->cmd_list;
 	while (cmd)
 	{
 		cmd->heredoc_fd = -1;
@@ -52,7 +62,7 @@ void handle_heredoc(t_command *cmd)
 			if (redir->type == REDIR_HEREDOC)
 			{
 				safe_close(&cmd->heredoc_fd);
-				cmd->heredoc_fd	= exec_heredoc(redir->file);
+				cmd->heredoc_fd	= exec_heredoc(redir->file, data);
 			}
 			redir = redir->next;
 		}
