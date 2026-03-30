@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/30 15:33:32 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/30 16:03:27 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ int wait_process(pid_t pid)
 
 	retval = 130;
 	wpid = 1;
-	printf("wait\n");
 	while (wpid > 0)
 	{
 		wpid = waitpid(-1, &status, 0);
@@ -114,37 +113,16 @@ int wait_process(pid_t pid)
 	return (retval);
 }
 
-int	execute(t_minishell *data)
+int exec_cmd(t_minishell *data, pid_t *pid_last_process, int **pipe_fd)
 {
-	int			**pipe_fd;
-	int			nb_cmd;
-	int			idx;
-	pid_t		pid;
-	t_command	*cmd;
-	int fd[2];
-	int retval;
+	t_command *cmd;
+	pid_t pid;
+	int idx;
+	int nb_cmd;
 	
 	cmd = data->cmd_list;
-	if (!cmd)
-		return (0);
-	nb_cmd = count_cmd(cmd);
-	pipe_fd = create_pipes(nb_cmd - 1);
-	if (!pipe_fd)
-		return (0);
-	if (!handle_heredoc(data))
-		return (128 + g_signal);
-	if (nb_cmd == 1 && is_builtin(cmd->argv[0]))
-	{
-		fd[0] = dup(STDIN_FILENO);
-		fd[1] = dup(STDOUT_FILENO);
-		retval = exec_builtin(data, cmd, &data->env);
-		dup2(fd[0], STDIN_FILENO);
-		dup2(fd[1], STDOUT_FILENO);
-		safe_close(&fd[0]);
-		safe_close(&fd[1]);
-		return (retval);
-	}
 	idx = 0;
+	nb_cmd = count_cmd(cmd);
 	while (cmd)
 	{
 		pid = fork();
@@ -176,9 +154,42 @@ int	execute(t_minishell *data)
 			safe_close(&cmd->heredoc_fd);
 			cmd = cmd->next;
 			idx++;
-			waitpid(pid, NULL, -1);
+			*pid_last_process = pid;
 		}
 	}
-	clear_pipes(pipe_fd, nb_cmd - 1);
+	return (1);
+}
+
+int	execute(t_minishell *data)
+{
+	int			**pipe_fd;
+	pid_t		pid;
+	t_command	*cmd;
+	int fd[2];
+	int retval;
+	
+	pid = 0;
+	cmd = data->cmd_list;
+	if (!cmd)
+		return (0);
+	pipe_fd = create_pipes(count_cmd(cmd) - 1);
+	if (!pipe_fd)
+		return (0);
+	if (!handle_heredoc(data))
+		return (128 + g_signal);
+	if (count_cmd(cmd) == 1 && is_builtin(cmd->argv[0]))
+	{
+		fd[0] = dup(STDIN_FILENO);
+		fd[1] = dup(STDOUT_FILENO);waitpid(pid, NULL, -1);
+		retval = exec_builtin(data, cmd, &data->env);
+		dup2(fd[0], STDIN_FILENO);
+		dup2(fd[1], STDOUT_FILENO);
+		safe_close(&fd[0]);
+		safe_close(&fd[1]);
+		return (retval);
+	}
+	if (!exec_cmd(data, &pid, pipe_fd))
+		return (1);
+	clear_pipes(pipe_fd, count_cmd(cmd) - 1);
 	return (wait_process(pid));
 }
