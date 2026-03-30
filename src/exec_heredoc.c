@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:39:51 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/03/27 15:10:24 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/30 14:24:03 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ static int exec_heredoc(char *limiter, t_minishell *data)
 	}
 	while (1)
 	{
+		if (g_signal == SIGINT)
+		{
+			close(fd[0]);
+			close(fd[1]);
+			return (-1);
+		}
 		write(1, ">", 1);
 		line = get_next_line(0);
 		if (line == NULL)
@@ -47,7 +53,7 @@ static int exec_heredoc(char *limiter, t_minishell *data)
 	return (fd[0]);
 }
 
-void handle_heredoc(t_minishell *data)
+int handle_heredoc(t_minishell *data)
 {
 	t_command *cmd;
 	t_redir *redir;
@@ -63,9 +69,12 @@ void handle_heredoc(t_minishell *data)
 			{
 				safe_close(&cmd->heredoc_fd);
 				cmd->heredoc_fd	= exec_heredoc(redir->file, data);
+				if (cmd->heredoc_fd == -1)
+					return (0);
 			}
 			redir = redir->next;
 		}
 		cmd = cmd->next;
 	}
+	return (1);
 }

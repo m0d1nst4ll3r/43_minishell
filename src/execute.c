@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/27 17:11:43 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/03/30 15:33:32 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,9 @@ int wait_process(pid_t pid)
 	int status;
 	int retval;
 
-	wpid = 1;
 	retval = 130;
+	wpid = 1;
+	printf("wait\n");
 	while (wpid > 0)
 	{
 		wpid = waitpid(-1, &status, 0);
@@ -106,14 +107,13 @@ int wait_process(pid_t pid)
 		{
 			if (WIFEXITED(status))
 				retval = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				retval = 128 + WTERMSIG(status);
 		}
 	}
 	return (retval);
 }
 
-/// @brief 
-/// @param data 
-/// @return 
 int	execute(t_minishell *data)
 {
 	int			**pipe_fd;
@@ -131,7 +131,8 @@ int	execute(t_minishell *data)
 	pipe_fd = create_pipes(nb_cmd - 1);
 	if (!pipe_fd)
 		return (0);
-	handle_heredoc(data);
+	if (!handle_heredoc(data))
+		return (128 + g_signal);
 	if (nb_cmd == 1 && is_builtin(cmd->argv[0]))
 	{
 		fd[0] = dup(STDIN_FILENO);
@@ -175,6 +176,7 @@ int	execute(t_minishell *data)
 			safe_close(&cmd->heredoc_fd);
 			cmd = cmd->next;
 			idx++;
+			waitpid(pid, NULL, -1);
 		}
 	}
 	clear_pipes(pipe_fd, nb_cmd - 1);
