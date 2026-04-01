@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/01 18:47:08 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/01 18:56:59 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,9 +197,9 @@ int	execute(t_minishell *data)
 		return (128 + g_signal);
 	if (count_cmd(cmd) == 1 && is_builtin(cmd->argv[0]))
 	{
+		free(pipe_fd);
 		retval = exec_one_builtin(data);
 		safe_close(&cmd->heredoc_fd);
-		free(pipe_fd);
 		return (retval);
 	}
 	if (!exec_cmd(data, &pid, pipe_fd))

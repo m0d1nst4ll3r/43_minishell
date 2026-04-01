@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/30 15:58:25 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/01 19:12:52 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static void	error_stop(char **env, char *err_str)
 int	main(int ac, char **av, char **ep)
 {
 	t_minishell	data;
+	int 		retval;
 
 	(void)ac;
 	(void)av;
@@ -54,7 +55,10 @@ int	main(int ac, char **av, char **ep)
 		}
 		data.line = readline(PROMPT);
 		if (!data.line)
+		{
+			printf("exit\n");
 			break ;
+		}
 		add_history(data.line);
 		//printf("You typed: %s\n", data.line);
 		data.cmd_list = parse(&data);
@@ -62,6 +66,7 @@ int	main(int ac, char **av, char **ep)
 		free(data.line);
 		cleanup_cmd_list(data.cmd_list, 1);
 	}
+	retval = data.last_return;
 	cleanup_prog(data.env);
-	return (0);
+	return (retval);
 }
