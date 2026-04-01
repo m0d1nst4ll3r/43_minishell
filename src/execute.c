@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/30 16:03:27 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/01 14:58:53 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,15 @@
 /* CHILD PROCESS*/
 /*========================================================*/
 
+int		is_a_directory(char *path)
+{
+	struct stat s;
 
+	stat(path, &s);
+	if (S_ISDIR(s.st_mode))
+		return (1);
+	return (0);
+}
 
 char	*search_in_paths(char *cmd, char **paths)
 {
@@ -55,9 +63,20 @@ char	*get_path(char *cmd, char **envp)
 	if (ft_strchr(cmd, '/'))
 	{
 		if (access(cmd, F_OK) != 0)
+		{
+			print_error(cmd);
 			exit(127); //clean avant
+		}
+		else if (is_a_directory(cmd))
+		{
+			ft_fprintf(2, "%s: %s: Is a directory\n", NAME, cmd);
+			exit(126);
+		}
 		else if (access(cmd, X_OK) != 0)
+		{
+			print_error(cmd);
 			exit(126); //clean avant
+		}
 		else
 			return (ft_strdup(cmd));
 	}
@@ -81,7 +100,7 @@ void child_process(t_minishell *data, t_command *cmd, char ***envp)
 	if (!path) //path not found
 	{
 		//clean_all;
-		ft_fprintf(2, "command not found: %s\n", cmd->argv[0]);
+		ft_fprintf(2, "%s: %s: command not found\n", NAME, cmd->argv[0]);
 		exit (127);
 	}
 	execve(path, cmd->argv, *envp);

@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:59:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/27 17:00:49 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/01 14:55:36 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ extern int	g_signal;
 # include <unistd.h>
 # include <sys/wait.h>
 # include <limits.h>
-
+# include <sys/types.h> //
+# include <sys/stat.h> //
 // =================================== USER ===================================
 # include "libft.h"
 # include "structure.h"

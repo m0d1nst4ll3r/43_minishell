@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:29:41 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/19 16:18:01 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/01 14:37:34 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,3 +42,4 @@ void	print_error_builtin_file(char *name, char *file, char *err_str)
 	else
 		ft_fprintf(2, "%s: %s: %s: %s\n", NAME, name, file, err_str);
 }
+	
