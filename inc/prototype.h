@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/30 14:32:17 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/01 18:43:46 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void			handle_pipes(int **pipe_fd, int nb_cmd, int idx);
 int 			handle_heredoc(t_minishell *data);
 int 			is_builtin(char *cmd);
 int 			exec_builtin(t_minishell *data, t_command *cmd, char ***ep);
+int 			exec_one_builtin(t_minishell *data);
 void			handle_redir(t_command *cmd);
 // Heredoc
 char			*expand_line(char *line, t_minishell *d);

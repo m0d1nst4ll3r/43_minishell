@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/01 14:58:53 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/01 18:47:08 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void child_process(t_minishell *data, t_command *cmd, char ***envp)
 	if (is_builtin(cmd->argv[0]))
 		exit (exec_builtin(data, cmd, envp));
 	path = get_path(cmd->argv[0], *envp);
-	if (!path) //path not found
+	if (!path)
 	{
 		//clean_all;
 		ft_fprintf(2, "%s: %s: command not found\n", NAME, cmd->argv[0]);
@@ -184,7 +184,6 @@ int	execute(t_minishell *data)
 	int			**pipe_fd;
 	pid_t		pid;
 	t_command	*cmd;
-	int fd[2];
 	int retval;
 	
 	pid = 0;
@@ -198,13 +197,9 @@ int	execute(t_minishell *data)
 		return (128 + g_signal);
 	if (count_cmd(cmd) == 1 && is_builtin(cmd->argv[0]))
 	{
-		fd[0] = dup(STDIN_FILENO);
-		fd[1] = dup(STDOUT_FILENO);waitpid(pid, NULL, -1);
-		retval = exec_builtin(data, cmd, &data->env);
-		dup2(fd[0], STDIN_FILENO);
-		dup2(fd[1], STDOUT_FILENO);
-		safe_close(&fd[0]);
-		safe_close(&fd[1]);
+		retval = exec_one_builtin(data);
+		safe_close(&cmd->heredoc_fd);
+		free(pipe_fd);
 		return (retval);
 	}
 	if (!exec_cmd(data, &pid, pipe_fd))

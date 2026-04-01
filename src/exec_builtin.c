@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 14:16:35 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/03/27 14:16:48 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/01 18:42:43 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,20 @@ int exec_builtin(t_minishell *data, t_command *cmd, char ***ep)
 		retval = builtin_env(ac, cmd->argv, *ep);
 	else if (ft_strncmp("exit", cmd->argv[0], ft_strlen("exit")) == 0)
 	 	retval = builtin_exit(ac, cmd->argv, data);
+	return (retval);
+}
+
+int exec_one_builtin(t_minishell *data)
+{
+	int fd[2];
+	int retval;
+	
+	fd[0] = dup(STDIN_FILENO);
+	fd[1] = dup(STDOUT_FILENO);
+	retval = exec_builtin(data, data->cmd_list, &data->env);
+	dup2(fd[0], STDIN_FILENO);
+	dup2(fd[1], STDOUT_FILENO);
+	close(fd[0]);
+	close(fd[1]);
 	return (retval);
 }
