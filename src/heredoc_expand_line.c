@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 11:46:59 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/27 15:38:40 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/02 14:50:51 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static void	fill_expanded_line(char *line, t_minishell *d, char *new_line)
 		else
 			new_line[len++] = line[i++];
 	}
+	new_line[len] = '\0';
 }
 
 static size_t	get_new_len(char *line, t_minishell *d)
@@ -34,6 +35,7 @@ static size_t	get_new_len(char *line, t_minishell *d)
 	size_t	i;
 
 	i = 0;
+	len = 0;
 	while (line[i])
 	{
 		if (is_valid_envar_syntax(line + i))
@@ -53,7 +55,6 @@ char	*expand_line(char *line, t_minishell *d)
 	char	*new_line;
 
 	new_len = get_new_len(line, d);
-	//printf("new_len : %zu\n", new_len);
 	new_line = malloc(new_len + 1);
 	if (!new_line)
 		return (NULL); // Will call error_out if we ever change
@@ -63,6 +64,5 @@ char	*expand_line(char *line, t_minishell *d)
 		return (new_line);
 	}
 	fill_expanded_line(line, d, new_line);
-	//printf("%s\n", new_line);
 	return (new_line);
 }
