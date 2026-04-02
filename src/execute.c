@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/01 18:56:59 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/02 15:56:48 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,61 +52,56 @@ char	*search_in_paths(char *cmd, char **paths)
 	return (NULL);
 }
 
-char	*get_path(char *cmd, char **envp)
+char	**get_path_lst(char *cmd, char **envp)
 {
 	int		i;
-	char	**paths;
 
 	if (!cmd || !envp)
 		return (NULL);
 	i = 0;
-	if (ft_strchr(cmd, '/'))
-	{
-		if (access(cmd, F_OK) != 0)
-		{
-			print_error(cmd);
-			exit(127); //clean avant
-		}
-		else if (is_a_directory(cmd))
-		{
-			ft_fprintf(2, "%s: %s: Is a directory\n", NAME, cmd);
-			exit(126);
-		}
-		else if (access(cmd, X_OK) != 0)
-		{
-			print_error(cmd);
-			exit(126); //clean avant
-		}
-		else
-			return (ft_strdup(cmd));
-	}
+	// if (ft_strchr(cmd, '/'))
+	// {
+	// 	if (access(cmd, F_OK) != 0)
+	// 	{
+	// 		print_error(cmd);
+	// 		exit_prog(data, 127);
+	// 	}
+	// 	else if (is_a_directory(cmd))
+	// 	{
+	// 		ft_fprintf(2, "%s: %s: Is a directory\n", NAME, cmd);
+	// 		exit_prog(data, 126);
+	// 	}
+	// 	else if (access(cmd, X_OK) != 0)
+	// 	{
+	// 		print_error(cmd);
+	// 		exit_prog(data, 126);
+	// 	}
+	// 	else
+	// 		return (ft_strdup(cmd));
+	// }
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (!envp[i])
-		return (NULL); //pas de PATH dans l'envp
-	paths = ft_split(envp[i] + 5, ':');
-	if (!paths)
 		return (NULL);
-	return (search_in_paths(cmd, paths));
+	return (ft_split(envp[i] + 5, ':'));
 }
 
 void child_process(t_minishell *data, t_command *cmd, char ***envp)
 {
+	char **path_lst;
 	char *path;
 
 	if (is_builtin(cmd->argv[0]))
 		exit (exec_builtin(data, cmd, envp));
-	path = get_path(cmd->argv[0], *envp);
-	if (!path)
+	path_lst = get_path_lst(cmd->argv[0], *envp);
+	if (!path_lst)
 	{
-		//clean_all;
 		ft_fprintf(2, "%s: %s: command not found\n", NAME, cmd->argv[0]);
-		exit (127);
+		exit_prog(data, 127);
 	}
 	execve(path, cmd->argv, *envp);
 	perror("execve");
-	//clean
-	exit (1);
+	exit_prog(data, 1);
 }
 
 /*========================================================*/
