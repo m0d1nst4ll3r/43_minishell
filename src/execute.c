@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/07 13:43:10 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/07 15:05:07 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,11 @@ char *get_path(t_minishell *data, t_command *cmd)
 			exit_prog(data, 1);
 		}
 		if (access(path, F_OK) == 0)
-			return (path);
+			return (free_dir_lst(dir_lst), path);
 		free(path);
 		i++;
 	}
+	free_dir_lst(dir_lst);
 	return (NULL);
 }
 
