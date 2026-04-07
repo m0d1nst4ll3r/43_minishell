@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 19:33:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/26 13:18:04 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/07 13:49:00 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,7 @@ static int	export_envar(char *name, char *envar, char ***ep)
 	}
 	to_replace = get_to_replace(envar, *ep);
 	if (!to_replace)
-	{
-		printf("DEBUG - NO VAR FOUND\n");
 		return (add_new_envar(new_envar, ep));
-	}
 	free(*to_replace);
 	*to_replace = new_envar;
 	return (0);

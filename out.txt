@@ -1,0 +1,10 @@
+draft
+inc
+libft
+Makefile
+minishell
+out.txt
+README.md
+src
+tests
+valgrind.supp

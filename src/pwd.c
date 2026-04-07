@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 19:00:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/18 19:47:11 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/07 14:59:48 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ int	builtin_pwd(int ac, char **av, char **ep)
 		print_error_builtin(av[0], ERR_PWD);
 		return (1);
 	}
+	free(pwd);
 	return (0);
 }

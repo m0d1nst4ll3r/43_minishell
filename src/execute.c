@@ -6,34 +6,11 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/07 12:32:54 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/07 13:43:10 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void exec(t_minishell *data, char *path, char **argv)
-{
-	if (!path || !argv)
-		return ;
-	if (access(path, F_OK) != 0)
-	{
-		print_error(argv[0]);
-		exit_prog(data, 127);
-	}
-	else if (is_a_directory(path))
-	{
-		ft_fprintf(2, "%s: %s: Is a directory\n", NAME, argv[0]);
-		exit_prog(data, 126);
-	}
-	else if (access(path, X_OK) != 0)
-	{
-		print_error(path);
-		exit_prog(data, 126);
-	}
-	execve(path, argv, data->env);
-	perror("execve");
-}
 
 /*========================================================*/
 /* CHILD PROCESS*/
@@ -52,7 +29,7 @@ void free_dir_lst(char **dir_lst)
 	free(dir_lst);
 }
 
-int check_access(t_minishell *data, t_command *cmd, char *path)
+void check_access(t_minishell *data, t_command *cmd, char *path)
 {
 	struct stat s;
 
@@ -79,16 +56,6 @@ int check_access(t_minishell *data, t_command *cmd, char *path)
 		free(path);
 		exit_prog(data, 126);
 	}
-}
-
-int		is_a_directory(char *path)
-{
-	struct stat s;
-
-	stat(path, &s);
-	if (S_ISDIR(s.st_mode))
-		return (1);
-	return (0);
 }
 
 char	*make_path(char *dir, char *cmd)
@@ -142,7 +109,7 @@ char *get_path(t_minishell *data, t_command *cmd)
 			free_dir_lst(dir_lst);
 			exit_prog(data, 1);
 		}
-		if (access(path, F_OK))
+		if (access(path, F_OK) == 0)
 			return (path);
 		free(path);
 		i++;
@@ -157,14 +124,10 @@ void child_process(t_minishell *data, t_command *cmd)
 	if (is_builtin(cmd->argv[0]))
 		exit (exec_builtin(data, cmd, &data->env));
 	path = get_path(data, cmd);
-	if (!path)
-	{
-		ft_fprintf(2, "%s: %s: command not found\n", NAME, cmd->argv[0]);
-		exit_prog(data, 127);
-	}
-	
+	check_access(data, cmd, path);
 	execve(path, cmd->argv, data->env);
 	perror("execve");
+	free(path);
 	exit_prog(data, 1);
 }
 
