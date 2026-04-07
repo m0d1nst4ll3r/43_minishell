@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/07 15:05:07 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/07 18:32:39 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void child_process(t_minishell *data, t_command *cmd)
 	char *path;
 
 	if (is_builtin(cmd->argv[0]))
-		exit (exec_builtin(data, cmd, &data->env));
+		exit_prog (data, exec_builtin(data, cmd, &data->env));
 	path = get_path(data, cmd);
 	check_access(data, cmd, path);
 	execve(path, cmd->argv, data->env);
