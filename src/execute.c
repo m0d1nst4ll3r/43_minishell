@@ -6,15 +6,80 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/02 15:56:48 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/07 12:32:54 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void exec(t_minishell *data, char *path, char **argv)
+{
+	if (!path || !argv)
+		return ;
+	if (access(path, F_OK) != 0)
+	{
+		print_error(argv[0]);
+		exit_prog(data, 127);
+	}
+	else if (is_a_directory(path))
+	{
+		ft_fprintf(2, "%s: %s: Is a directory\n", NAME, argv[0]);
+		exit_prog(data, 126);
+	}
+	else if (access(path, X_OK) != 0)
+	{
+		print_error(path);
+		exit_prog(data, 126);
+	}
+	execve(path, argv, data->env);
+	perror("execve");
+}
+
 /*========================================================*/
 /* CHILD PROCESS*/
 /*========================================================*/
+
+void free_dir_lst(char **dir_lst)
+{
+	int i;
+
+	i = 0;
+	while (dir_lst[i])
+	{
+		free(dir_lst[i]);
+		i++;
+	}
+	free(dir_lst);
+}
+
+int check_access(t_minishell *data, t_command *cmd, char *path)
+{
+	struct stat s;
+
+	if (!path)
+	{
+		ft_fprintf(2, "%s: %s: command not found\n", NAME, cmd->argv[0]);
+		exit_prog(data, 127);
+	}
+	if (stat(path, &s) != 0)
+	{
+		print_error(cmd->argv[0]);
+		free(path);
+		exit_prog(data, 127);
+	}
+	if (S_ISDIR(s.st_mode))
+	{
+		ft_fprintf(2, "%s: %s: Is a directory\n", NAME, cmd->argv[0]);
+		free(path);
+		exit_prog(data, 126);
+	}
+	if (access(path, X_OK) != 0)
+	{
+		print_error(cmd->argv[0]);
+		free(path);
+		exit_prog(data, 126);
+	}
+}
 
 int		is_a_directory(char *path)
 {
@@ -26,59 +91,30 @@ int		is_a_directory(char *path)
 	return (0);
 }
 
-char	*search_in_paths(char *cmd, char **paths)
+char	*make_path(char *dir, char *cmd)
 {
-	int		i;
 	char	*tmp;
 	char	*path;
 
-	if (!cmd || !paths)
+	if (!dir || !cmd)
 		return (NULL);
-	i = 0;
-	while (paths[i])
-	{
-		tmp = ft_strjoin(paths[i], "/");
-		if (!tmp)
-			return (NULL);
-		path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (!path)
-			return (NULL);
-		if (access(path, X_OK) == 0)
-			return (path);
-		free(path);
-		i++;
-	}
-	return (NULL);
+	tmp = ft_strjoin(dir, "/");
+	if (!tmp)
+		return (NULL);
+	path = ft_strjoin(tmp, cmd);
+	free(tmp);
+	if (!path)
+		return (NULL);
+	return (path);
 }
 
-char	**get_path_lst(char *cmd, char **envp)
+char	**get_dir_lst(char **envp)
 {
 	int		i;
 
-	if (!cmd || !envp)
+	if (!envp)
 		return (NULL);
 	i = 0;
-	// if (ft_strchr(cmd, '/'))
-	// {
-	// 	if (access(cmd, F_OK) != 0)
-	// 	{
-	// 		print_error(cmd);
-	// 		exit_prog(data, 127);
-	// 	}
-	// 	else if (is_a_directory(cmd))
-	// 	{
-	// 		ft_fprintf(2, "%s: %s: Is a directory\n", NAME, cmd);
-	// 		exit_prog(data, 126);
-	// 	}
-	// 	else if (access(cmd, X_OK) != 0)
-	// 	{
-	// 		print_error(cmd);
-	// 		exit_prog(data, 126);
-	// 	}
-	// 	else
-	// 		return (ft_strdup(cmd));
-	// }
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (!envp[i])
@@ -86,20 +122,48 @@ char	**get_path_lst(char *cmd, char **envp)
 	return (ft_split(envp[i] + 5, ':'));
 }
 
-void child_process(t_minishell *data, t_command *cmd, char ***envp)
+char *get_path(t_minishell *data, t_command *cmd)
 {
-	char **path_lst;
+	char *path;
+	char **dir_lst;
+	int	i;
+	
+	if (ft_strchr(cmd->argv[0], '/'))
+		return (ft_strdup(cmd->argv[0]));
+	dir_lst = get_dir_lst(data->env);
+	if (!dir_lst)
+		return (NULL);
+	i = 0;
+	while (dir_lst[i])
+	{
+		path = make_path(dir_lst[i], cmd->argv[0]);
+		if (!path)
+		{
+			free_dir_lst(dir_lst);
+			exit_prog(data, 1);
+		}
+		if (access(path, F_OK))
+			return (path);
+		free(path);
+		i++;
+	}
+	return (NULL);
+}
+
+void child_process(t_minishell *data, t_command *cmd)
+{
 	char *path;
 
 	if (is_builtin(cmd->argv[0]))
-		exit (exec_builtin(data, cmd, envp));
-	path_lst = get_path_lst(cmd->argv[0], *envp);
-	if (!path_lst)
+		exit (exec_builtin(data, cmd, &data->env));
+	path = get_path(data, cmd);
+	if (!path)
 	{
 		ft_fprintf(2, "%s: %s: command not found\n", NAME, cmd->argv[0]);
 		exit_prog(data, 127);
 	}
-	execve(path, cmd->argv, *envp);
+	
+	execve(path, cmd->argv, data->env);
 	perror("execve");
 	exit_prog(data, 1);
 }
@@ -161,7 +225,7 @@ int exec_cmd(t_minishell *data, pid_t *pid_last_process, int **pipe_fd)
 			}
 			handle_redir(cmd);
 			clear_pipes(pipe_fd, nb_cmd - 1);
-			child_process(data, cmd, &data->env);
+			child_process(data, cmd);
 		}
 		else
 		{
