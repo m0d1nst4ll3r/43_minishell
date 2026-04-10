@@ -6,17 +6,44 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:39:51 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/02 14:47:32 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/10 15:12:57 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static char *read_heredoc_line(void)
+{
+	char *line;
+	
+	write(1, ">", 1);
+	line = get_next_line(0);
+	if (line == NULL)
+		return (NULL);
+	if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '\n')
+		line[ft_strlen(line) - 1] = '\0';
+	return (line);
+}
+
+static void write_line(char *line, int fd, t_minishell *data)
+{
+	char *expand;
+
+	expand = expand_line(line, data);
+	if (expand)
+	{
+		free(line);
+		line = expand;
+	}
+	write(fd, line, ft_strlen(line));
+	write(fd, "\n", 1);
+	free(line);
+}
+
 static int exec_heredoc(char *limiter, t_minishell *data)
 {
 	int fd[2];
 	char *line;
-	char *expand = NULL;
 
 	if(pipe(fd) == -1)
 	{
@@ -26,28 +53,16 @@ static int exec_heredoc(char *limiter, t_minishell *data)
 	while (1)
 	{
 		if (g_signal == SIGINT)
-		{
-			close(fd[0]);
-			close(fd[1]);
-			return (-1);
-		}
-		write(1, ">", 1);
-		line = get_next_line(0);
-		if (line == NULL)
+			return (close(fd[0]), close(fd[1]), -1);
+		line = read_heredoc_line();
+		if (!line)
 			break ;
-		if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '\n')
-			line[ft_strlen(line) - 1] = '\0';
 		if (ft_strncmp(limiter, line, ft_strlen(limiter)) == 0 && ft_strlen(limiter) == ft_strlen(line))
-			break ;
-		expand = expand_line(line, data);
-		if (expand)
 		{
-			free(line);
-			line = expand;
+			free (line);
+			break ;	
 		}
-		write(fd[1], line, ft_strlen(line));
-		write(fd[1], "\n", 1);
-		free(line);
+		write_line(line, fd[1], data);
 	}
 	close(fd[1]);
 	return (fd[0]);
