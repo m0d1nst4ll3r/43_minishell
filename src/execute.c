@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/10 15:01:02 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/10 18:10:59 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,11 @@ void child_process(t_minishell *data, t_command *cmd)
 {
 	char *path;
 
+	if (!cmd->argv[0][0])
+	{
+		ft_fprintf(2, "%s: %s: command not found\n", NAME, cmd->argv[0]);
+		exit_prog(data, 127);
+	}
 	if (is_builtin(cmd->argv[0]))
 		exit_prog (data, exec_builtin(data, cmd, &data->env));
 	path = get_path(data, cmd);
@@ -155,6 +160,35 @@ int wait_process(pid_t pid)
 	return (retval);
 }
 
+static void exec_child(t_minishell *data, t_command *cmd, int **pipe_fd, int idx)
+{
+	int nb_cmd;
+
+	nb_cmd = count_cmd(cmd);
+	if (reset_signal_handlers())
+	{
+		clear_pipes(pipe_fd, nb_cmd - 1);
+		exit_prog(data, 1);
+	}
+	handle_pipes(pipe_fd, nb_cmd, idx);
+	if (cmd->heredoc_fd != -1)
+	{
+		dup2(cmd->heredoc_fd, STDIN_FILENO);
+		safe_close(&cmd->heredoc_fd);
+	}
+	handle_redir(cmd);
+	clear_pipes(pipe_fd, nb_cmd - 1);
+	child_process(data, cmd);
+}
+
+static void exec_parent(t_command *cmd, pid_t *pid_last_process, pid_t pid, int *idx)
+{
+	safe_close(&cmd->heredoc_fd);
+	cmd = cmd->next;
+	(*idx)++;
+	*pid_last_process = pid;
+}
+
 int exec_cmd(t_minishell *data, pid_t *pid_last_process, int **pipe_fd)
 {
 	t_command *cmd;
@@ -175,29 +209,10 @@ int exec_cmd(t_minishell *data, pid_t *pid_last_process, int **pipe_fd)
 			return (0);
 		}
 		if (pid == 0)
-		{
-			if (reset_signal_handlers())
-			{
-				clear_pipes(pipe_fd, nb_cmd - 1);
-				exit_prog(data, 1);
-			}
-			handle_pipes(pipe_fd, nb_cmd, idx);
-			if (cmd->heredoc_fd != -1)
-			{
-				dup2(cmd->heredoc_fd, STDIN_FILENO);
-				safe_close(&cmd->heredoc_fd);
-			}
-			handle_redir(cmd);
-			clear_pipes(pipe_fd, nb_cmd - 1);
-			child_process(data, cmd);
-		}
+			exec_child(data, cmd, pipe_fd, idx);
 		else
-		{
-			safe_close(&cmd->heredoc_fd);
-			cmd = cmd->next;
-			idx++;
-			*pid_last_process = pid;
-		}
+			exec_parent(cmd, pid_last_process, pid, &idx);
+		cmd = cmd->next;
 	}
 	return (1);
 }

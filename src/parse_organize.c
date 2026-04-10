@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_organize.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 15:47:59 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/17 16:25:17 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/10 17:31:28 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static size_t	get_redir_count(t_token *token_list)
 	return (count);
 }
 
-t_command	*organize(t_token *token_list)
+t_command	*organize(t_token *token_list, int *last_return)
 {
 	t_command	*cmd_list;
 	t_command	*last;
@@ -81,6 +81,7 @@ t_command	*organize(t_token *token_list)
 	if (!is_valid_token_list(token_list))
 	{
 		print_error(ERR_SYNTAX);
+		*last_return = 2;
 		return (NULL);
 	}
 	cmd_list = NULL;

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tokenize_len.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:43:47 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/26 12:04:19 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/10 17:33:45 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static size_t	check_state(t_parse_state state, size_t len, int had_quotes)
+static size_t	check_state(t_parse_state state, size_t len, int had_quotes, int *last_return)
 {
 	if (state != STATE_NONE)
 	{
@@ -20,6 +20,7 @@ static size_t	check_state(t_parse_state state, size_t len, int had_quotes)
 			print_error(ERR_UNFQUOTE);
 		if (state == STATE_DQUOTE)
 			print_error(ERR_UNFDQUOTE);
+		*last_return = 2;
 		return (-2);
 	}
 	if (!len && !had_quotes)
@@ -52,5 +53,5 @@ int	get_word_len(t_minishell *d, size_t i)
 			len++;
 		}
 	}
-	return (check_state(state, len, had_quotes));
+	return (check_state(state, len, had_quotes, &d->last_return));
 }

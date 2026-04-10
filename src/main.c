@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/07 15:40:12 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/10 17:40:12 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ int	main(int ac, char **av, char **ep)
 		add_history(data.line);
 		//printf("You typed: %s\n", data.line);
 		data.cmd_list = parse(&data);
-		data.last_return = execute(&data); // Memo: Care about passing NULL env to execve in case of failed malloc
+		if (data.cmd_list)
+			data.last_return = execute(&data); // Memo: Care about passing NULL env to execve in case of failed malloc
 		free(data.line);
 		cleanup_cmd_list(data.cmd_list, 1);
 	}

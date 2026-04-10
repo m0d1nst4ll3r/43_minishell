@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:10 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/17 15:51:28 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/10 17:30:42 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_command	*parse(t_minishell *d)
 	t_command	*cmd_list;
 
 	token_list = tokenize(d);
-	cmd_list = organize(token_list);
+	cmd_list = organize(token_list, &d->last_return);
 	if (!cmd_list)
 		cleanup_token_list(token_list, 1);
 	else

@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/01 18:43:46 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/10 17:31:48 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_token_type	get_token_type(char *line);
 int				is_end_of_word(char c, t_parse_state state);
 void			update_state(char c, t_parse_state *state, size_t *i);
 // Organizer
-t_command		*organize(t_token *token_list);
+t_command		*organize(t_token *token_list, int *last_return);
 int				fill_cmd(t_token **token_list, t_command *cmd);
 int				create_new_cmd(t_command **cmd_list, size_t argv_count,
 					t_command **last);
