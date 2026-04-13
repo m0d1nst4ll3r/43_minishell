@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:00:56 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/25 16:28:24 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/13 15:57:58 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,15 @@ typedef struct s_command
 	int 				heredoc_fd;
 	struct s_command	*next;
 }	t_command;
+
+// ================================= EXECUTOR ==================================
+typedef struct s_exec
+{
+	int **pipe_fd;
+	pid_t last_pid;
+	t_command *cmd;
+	int nb_cmd;
+}	t_exec;
 
 // ================================ MAIN STRUCT ================================
 typedef struct s_minishell

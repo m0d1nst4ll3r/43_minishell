@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/13 15:29:22 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/13 16:02:07 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,32 +215,31 @@ int exec_cmd(t_minishell *data, pid_t *pid_last_process, int **pipe_fd)
 
 int	execute(t_minishell *data)
 {
-	int			**pipe_fd;
-	pid_t		pid;
-	t_command	*cmd;
+	t_exec exec;
 	int retval;
 	
-	pid = 0;
-	cmd = data->cmd_list;
-	if (!cmd)
+	exec.last_pid = 0;
+	exec.cmd = data->cmd_list;
+	if (!exec.cmd)
 		return (0);
-	pipe_fd = create_pipes(count_cmd(cmd) - 1);
-	if (!pipe_fd)
+	exec.nb_cmd = count_cmd(exec.cmd);
+	exec.pipe_fd = create_pipes(exec.nb_cmd - 1);
+	if (!exec.pipe_fd)
 		return (0);
 	if (!handle_heredoc(data))
 	{
-		clear_pipes(pipe_fd, count_cmd(cmd) - 1);
+		clear_pipes(exec.pipe_fd, exec.nb_cmd - 1);
 		return (128 + g_signal);
 	}
-	if (count_cmd(cmd) == 1 && is_builtin(cmd->argv[0]))
+	if (exec.nb_cmd == 1 && is_builtin(exec.cmd->argv[0]))
 	{
-		free(pipe_fd);
+		clear_pipes(exec.pipe_fd, exec.nb_cmd - 1);
 		retval = exec_one_builtin(data);
-		safe_close(&cmd->heredoc_fd);
+		safe_close(&exec.cmd->heredoc_fd);
 		return (retval);
 	}
-	if (!exec_cmd(data, &pid, pipe_fd))
+	if (!exec_cmd(data, &exec.last_pid, exec.pipe_fd))
 		return (1);
-	clear_pipes(pipe_fd, count_cmd(cmd) - 1);
-	return (wait_process(pid));
+	clear_pipes(exec.pipe_fd, exec.nb_cmd - 1);
+	return (wait_process(exec.last_pid));
 }
