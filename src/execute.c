@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/10 18:10:59 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/13 15:29:22 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,11 +160,8 @@ int wait_process(pid_t pid)
 	return (retval);
 }
 
-static void exec_child(t_minishell *data, t_command *cmd, int **pipe_fd, int idx)
+static void exec_child(t_minishell *data, t_command *cmd, int **pipe_fd, int nb_cmd, int idx)
 {
-	int nb_cmd;
-
-	nb_cmd = count_cmd(cmd);
 	if (reset_signal_handlers())
 	{
 		clear_pipes(pipe_fd, nb_cmd - 1);
@@ -181,10 +178,10 @@ static void exec_child(t_minishell *data, t_command *cmd, int **pipe_fd, int idx
 	child_process(data, cmd);
 }
 
-static void exec_parent(t_command *cmd, pid_t *pid_last_process, pid_t pid, int *idx)
+static void exec_parent(t_command **cmd, pid_t *pid_last_process, pid_t pid, int *idx)
 {
-	safe_close(&cmd->heredoc_fd);
-	cmd = cmd->next;
+	safe_close(&(*cmd)->heredoc_fd);
+	*cmd = (*cmd)->next;
 	(*idx)++;
 	*pid_last_process = pid;
 }
@@ -209,10 +206,9 @@ int exec_cmd(t_minishell *data, pid_t *pid_last_process, int **pipe_fd)
 			return (0);
 		}
 		if (pid == 0)
-			exec_child(data, cmd, pipe_fd, idx);
+			exec_child(data, cmd, pipe_fd, nb_cmd, idx);
 		else
-			exec_parent(cmd, pid_last_process, pid, &idx);
-		cmd = cmd->next;
+			exec_parent(&cmd, pid_last_process, pid, &idx);
 	}
 	return (1);
 }
