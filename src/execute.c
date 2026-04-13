@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/13 16:02:07 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/13 16:39:29 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,13 +168,13 @@ static void exec_child(t_minishell *data, t_command *cmd, int **pipe_fd, int nb_
 		exit_prog(data, 1);
 	}
 	handle_pipes(pipe_fd, nb_cmd, idx);
+	clear_pipes(pipe_fd, nb_cmd - 1);
 	if (cmd->heredoc_fd != -1)
 	{
 		dup2(cmd->heredoc_fd, STDIN_FILENO);
 		safe_close(&cmd->heredoc_fd);
 	}
-	handle_redir(cmd);
-	clear_pipes(pipe_fd, nb_cmd - 1);
+	handle_redir(data, cmd);
 	child_process(data, cmd);
 }
 
@@ -216,7 +216,6 @@ int exec_cmd(t_minishell *data, pid_t *pid_last_process, int **pipe_fd)
 int	execute(t_minishell *data)
 {
 	t_exec exec;
-	int retval;
 	
 	exec.last_pid = 0;
 	exec.cmd = data->cmd_list;
@@ -234,9 +233,7 @@ int	execute(t_minishell *data)
 	if (exec.nb_cmd == 1 && is_builtin(exec.cmd->argv[0]))
 	{
 		clear_pipes(exec.pipe_fd, exec.nb_cmd - 1);
-		retval = exec_one_builtin(data);
-		safe_close(&exec.cmd->heredoc_fd);
-		return (retval);
+		return (exec_one_builtin(data));
 	}
 	if (!exec_cmd(data, &exec.last_pid, exec.pipe_fd))
 		return (1);

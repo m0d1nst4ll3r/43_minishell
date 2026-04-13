@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 14:16:35 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/01 18:42:43 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/13 16:41:29 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int exec_builtin(t_minishell *data, t_command *cmd, char ***ep)
 	int retval;
 
 	ac = 0;
-	handle_redir(cmd);
+	handle_redir(data, cmd);
 	retval = 1;
 	while (cmd->argv[ac])
 		ac++;
@@ -70,5 +70,6 @@ int exec_one_builtin(t_minishell *data)
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[0]);
 	close(fd[1]);
+	safe_close(&data->cmd_list->heredoc_fd);
 	return (retval);
 }
