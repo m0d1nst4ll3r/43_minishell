@@ -1,34 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/25 13:42:29 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/14 12:43:45 by bdemouge         ###   ########.fr       */
+/*   Created: 2026/04/14 12:58:13 by bdemouge          #+#    #+#             */
+/*   Updated: 2026/04/14 13:06:16 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_cmd(t_command *cmd)
+void	child_process(t_minishell *data, t_command *cmd)
 {
-	int	i;
+	char	*path;
 
-	i = 0;
-	while (cmd)
+	if (!cmd->argv[0][0])
 	{
-		cmd = cmd->next;
-		i++;
+		ft_fprintf(2, "%s: %s: command not found\n", NAME, cmd->argv[0]);
+		exit_prog(data, 127);
 	}
-	return (i);
-}
-
-void	safe_close(int *fd)
-{
-	if (*fd == -1)
-		return ;
-	close(*fd);
-	*fd = -1;
+	if (is_builtin(cmd->argv[0]))
+		exit_prog(data, exec_builtin(data, cmd, &data->env));
+	path = get_path(data, cmd);
+	check_access(data, cmd, path);
+	execve(path, cmd->argv, data->env);
+	perror("execve");
+	free(path);
+	exit_prog(data, 1);
 }

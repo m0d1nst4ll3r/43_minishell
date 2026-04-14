@@ -6,16 +6,16 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:39:51 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/10 15:12:57 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/14 12:42:52 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char *read_heredoc_line(void)
+static char	*read_heredoc_line(void)
 {
-	char *line;
-	
+	char	*line;
+
 	write(1, ">", 1);
 	line = get_next_line(0);
 	if (line == NULL)
@@ -25,9 +25,9 @@ static char *read_heredoc_line(void)
 	return (line);
 }
 
-static void write_line(char *line, int fd, t_minishell *data)
+static void	write_line(char *line, int fd, t_minishell *data)
 {
-	char *expand;
+	char	*expand;
 
 	expand = expand_line(line, data);
 	if (expand)
@@ -40,12 +40,12 @@ static void write_line(char *line, int fd, t_minishell *data)
 	free(line);
 }
 
-static int exec_heredoc(char *limiter, t_minishell *data)
+static int	exec_heredoc(char *limiter, t_minishell *data)
 {
-	int fd[2];
-	char *line;
+	int		fd[2];
+	char	*line;
 
-	if(pipe(fd) == -1)
+	if (pipe(fd) == -1)
 	{
 		print_error(ERR_PIPE);
 		return (-1);
@@ -57,10 +57,11 @@ static int exec_heredoc(char *limiter, t_minishell *data)
 		line = read_heredoc_line();
 		if (!line)
 			break ;
-		if (ft_strncmp(limiter, line, ft_strlen(limiter)) == 0 && ft_strlen(limiter) == ft_strlen(line))
+		if (ft_strncmp(limiter, line, ft_strlen(limiter)) == 0
+			&& ft_strlen(limiter) == ft_strlen(line))
 		{
-			free (line);
-			break ;	
+			free(line);
+			break ;
 		}
 		write_line(line, fd[1], data);
 	}
@@ -68,10 +69,10 @@ static int exec_heredoc(char *limiter, t_minishell *data)
 	return (fd[0]);
 }
 
-int handle_heredoc(t_minishell *data)
+int	handle_heredoc(t_minishell *data)
 {
-	t_command *cmd;
-	t_redir *redir;
+	t_command	*cmd;
+	t_redir		*redir;
 
 	cmd = data->cmd_list;
 	while (cmd)
@@ -83,7 +84,7 @@ int handle_heredoc(t_minishell *data)
 			if (redir->type == REDIR_HEREDOC)
 			{
 				safe_close(&cmd->heredoc_fd);
-				cmd->heredoc_fd	= exec_heredoc(redir->file, data);
+				cmd->heredoc_fd = exec_heredoc(redir->file, data);
 				if (cmd->heredoc_fd == -1)
 					return (0);
 			}

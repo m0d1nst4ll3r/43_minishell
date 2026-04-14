@@ -6,35 +6,42 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 14:16:35 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/14 12:32:22 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/14 12:42:39 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int is_builtin(char *cmd)
+int	is_builtin(char *cmd)
 {
-	if (ft_strncmp("echo", cmd, ft_strlen("echo")) == 0 && ft_strlen("echo") == ft_strlen(cmd))
+	if (ft_strncmp("echo", cmd, ft_strlen("echo")) == 0
+		&& ft_strlen("echo") == ft_strlen(cmd))
 		return (1);
-	else if (ft_strncmp("cd", cmd, ft_strlen("cd")) == 0 && ft_strlen("cd") == ft_strlen(cmd))
+	else if (ft_strncmp("cd", cmd, ft_strlen("cd")) == 0
+		&& ft_strlen("cd") == ft_strlen(cmd))
 		return (1);
-	else if (ft_strncmp("pwd", cmd, ft_strlen("pwd")) == 0 && ft_strlen("pwd") == ft_strlen(cmd))
+	else if (ft_strncmp("pwd", cmd, ft_strlen("pwd")) == 0
+		&& ft_strlen("pwd") == ft_strlen(cmd))
 		return (1);
-	else if (ft_strncmp("export", cmd, ft_strlen("export")) == 0 && ft_strlen("export") == ft_strlen(cmd))
+	else if (ft_strncmp("export", cmd, ft_strlen("export")) == 0
+		&& ft_strlen("export") == ft_strlen(cmd))
 		return (1);
-	else if (ft_strncmp("unset", cmd, ft_strlen("unset")) == 0 && ft_strlen("unset") == ft_strlen(cmd))
+	else if (ft_strncmp("unset", cmd, ft_strlen("unset")) == 0
+		&& ft_strlen("unset") == ft_strlen(cmd))
 		return (1);
-	else if (ft_strncmp("env", cmd, ft_strlen("env")) == 0 && ft_strlen("env") == ft_strlen(cmd))
+	else if (ft_strncmp("env", cmd, ft_strlen("env")) == 0
+		&& ft_strlen("env") == ft_strlen(cmd))
 		return (1);
-	else if (ft_strncmp("exit", cmd, ft_strlen("exit")) == 0 && ft_strlen("exit") == ft_strlen(cmd))
+	else if (ft_strncmp("exit", cmd, ft_strlen("exit")) == 0
+		&& ft_strlen("exit") == ft_strlen(cmd))
 		return (1);
 	return (0);
 }
 
-int exec_builtin(t_minishell *data, t_command *cmd, char ***ep)
+int	exec_builtin(t_minishell *data, t_command *cmd, char ***ep)
 {
-	int ac;
-	int retval;
+	int	ac;
+	int	retval;
 
 	ac = 0;
 	retval = 1;
@@ -53,15 +60,15 @@ int exec_builtin(t_minishell *data, t_command *cmd, char ***ep)
 	else if (ft_strncmp("env", cmd->argv[0], ft_strlen("env")) == 0)
 		retval = builtin_env(ac, cmd->argv, *ep);
 	else if (ft_strncmp("exit", cmd->argv[0], ft_strlen("exit")) == 0)
-	 	retval = builtin_exit(ac, cmd->argv, data);
+		retval = builtin_exit(ac, cmd->argv, data);
 	return (retval);
 }
 
-int exec_one_builtin(t_minishell *data)
+int	exec_one_builtin(t_minishell *data)
 {
-	int fd[2];
-	int retval;
-	
+	int	fd[2];
+	int	retval;
+
 	fd[0] = dup(STDIN_FILENO);
 	fd[1] = dup(STDOUT_FILENO);
 	if (!handle_redir(data->cmd_list))

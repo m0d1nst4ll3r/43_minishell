@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/14 12:28:04 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/14 13:03:36 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ int 			is_builtin(char *cmd);
 int 			exec_builtin(t_minishell *data, t_command *cmd, char ***ep);
 int 			exec_one_builtin(t_minishell *data);
 int				handle_redir(t_command *cmd);
+char			*get_path(t_minishell *data, t_command *cmd);
+void			check_access(t_minishell *data, t_command *cmd, char *path);
+void			child_process(t_minishell *data, t_command *cmd);
 // Heredoc
 char			*expand_line(char *line, t_minishell *d);
 
@@ -87,6 +90,7 @@ void 			exit_prog(t_minishell *data, int status);
 void			print_error(char *err_str);
 void			print_error_builtin(char *name, char *err_str);
 void			print_error_builtin_file(char *name, char *file, char *err_str);
+void			print_error_exit(char *arg, char *err_str);
 // Cleanup
 void			cleanup_env(char **env);
 void			cleanup_token_list(t_token *token_list, int clean_contents);

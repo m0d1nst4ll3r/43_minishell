@@ -6,13 +6,13 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 14:19:13 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/14 12:27:58 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/14 12:43:16 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int check_heredoc(t_redir *redir)
+static int	check_heredoc(t_redir *redir)
 {
 	while (redir)
 	{

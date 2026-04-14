@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:33:20 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/13 16:31:42 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/14 12:43:09 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,19 @@ void	clear_pipes(int **pipe_fd, int nb_pipes)
 	int	i;
 
 	i = 0;
-    if (!pipe_fd)
-    {
-        return ;
-    }
+	if (!pipe_fd)
+	{
+		return ;
+	}
 	while (i < nb_pipes)
 	{
 		safe_close(&pipe_fd[i][0]);
 		safe_close(&pipe_fd[i][1]);
-        if (pipe_fd[i])
-        {
-		    free(pipe_fd[i]);
-            pipe_fd[i] = NULL;
-        }
+		if (pipe_fd[i])
+		{
+			free(pipe_fd[i]);
+			pipe_fd[i] = NULL;
+		}
 		i++;
 	}
 	free(pipe_fd);

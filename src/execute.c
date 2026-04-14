@@ -6,143 +6,17 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/14 12:33:45 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/14 13:07:52 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*========================================================*/
-/* CHILD PROCESS*/
-/*========================================================*/
-
-void free_dir_lst(char **dir_lst)
+static int	wait_process(pid_t pid)
 {
-	int i;
-
-	i = 0;
-	while (dir_lst[i])
-	{
-		free(dir_lst[i]);
-		i++;
-	}
-	free(dir_lst);
-}
-
-void check_access(t_minishell *data, t_command *cmd, char *path)
-{
-	struct stat s;
-
-	if (!path)
-	{
-		ft_fprintf(2, "%s: %s: command not found\n", NAME, cmd->argv[0]);
-		exit_prog(data, 127);
-	}
-	if (stat(path, &s) != 0)
-	{
-		print_error(cmd->argv[0]);
-		free(path);
-		exit_prog(data, 127);
-	}
-	if (S_ISDIR(s.st_mode))
-	{
-		ft_fprintf(2, "%s: %s: Is a directory\n", NAME, cmd->argv[0]);
-		free(path);
-		exit_prog(data, 126);
-	}
-	if (access(path, X_OK) != 0)
-	{
-		print_error(cmd->argv[0]);
-		free(path);
-		exit_prog(data, 126);
-	}
-}
-
-char	*make_path(char *dir, char *cmd)
-{
-	char	*tmp;
-	char	*path;
-
-	if (!dir || !cmd)
-		return (NULL);
-	tmp = ft_strjoin(dir, "/");
-	if (!tmp)
-		return (NULL);
-	path = ft_strjoin(tmp, cmd);
-	free(tmp);
-	if (!path)
-		return (NULL);
-	return (path);
-}
-
-char	**get_dir_lst(char **envp)
-{
-	int		i;
-
-	if (!envp)
-		return (NULL);
-	i = 0;
-	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
-		i++;
-	if (!envp[i])
-		return (NULL);
-	return (ft_split(envp[i] + 5, ':'));
-}
-
-char *get_path(t_minishell *data, t_command *cmd)
-{
-	char *path;
-	char **dir_lst;
-	int	i;
-	
-	if (ft_strchr(cmd->argv[0], '/'))
-		return (ft_strdup(cmd->argv[0]));
-	dir_lst = get_dir_lst(data->env);
-	if (!dir_lst)
-		return (NULL);
-	i = 0;
-	while (dir_lst[i])
-	{
-		path = make_path(dir_lst[i], cmd->argv[0]);
-		if (!path)
-		{
-			free_dir_lst(dir_lst);
-			exit_prog(data, 1);
-		}
-		if (access(path, F_OK) == 0)
-			return (free_dir_lst(dir_lst), path);
-		free(path);
-		i++;
-	}
-	free_dir_lst(dir_lst);
-	return (NULL);
-}
-
-void child_process(t_minishell *data, t_command *cmd)
-{
-	char *path;
-
-	if (!cmd->argv[0][0])
-	{
-		ft_fprintf(2, "%s: %s: command not found\n", NAME, cmd->argv[0]);
-		exit_prog(data, 127);
-	}
-	if (is_builtin(cmd->argv[0]))
-		exit_prog (data, exec_builtin(data, cmd, &data->env));
-	path = get_path(data, cmd);
-	check_access(data, cmd, path);
-	execve(path, cmd->argv, data->env);
-	perror("execve");
-	free(path);
-	exit_prog(data, 1);
-}
-
-/*========================================================*/
-int wait_process(pid_t pid)
-{
-	pid_t wpid;
-	int status;
-	int retval;
+	pid_t	wpid;
+	int		status;
+	int		retval;
 
 	retval = 130;
 	wpid = 1;
@@ -160,7 +34,8 @@ int wait_process(pid_t pid)
 	return (retval);
 }
 
-static void exec_child(t_minishell *data, t_command *cmd, int **pipe_fd, int nb_cmd, int idx)
+static void	exec_child(t_minishell *data, t_command *cmd, int **pipe_fd,
+		int nb_cmd, int idx)
 {
 	if (reset_signal_handlers())
 	{
@@ -179,7 +54,8 @@ static void exec_child(t_minishell *data, t_command *cmd, int **pipe_fd, int nb_
 	child_process(data, cmd);
 }
 
-static void exec_parent(t_command **cmd, pid_t *pid_last_process, pid_t pid, int *idx)
+static void	exec_parent(t_command **cmd, pid_t *pid_last_process, pid_t pid,
+		int *idx)
 {
 	safe_close(&(*cmd)->heredoc_fd);
 	*cmd = (*cmd)->next;
@@ -187,13 +63,13 @@ static void exec_parent(t_command **cmd, pid_t *pid_last_process, pid_t pid, int
 	*pid_last_process = pid;
 }
 
-int exec_cmd(t_minishell *data, pid_t *pid_last_process, int **pipe_fd)
+static int	exec_cmd(t_minishell *data, pid_t *pid_last_process, int **pipe_fd)
 {
-	t_command *cmd;
-	pid_t pid;
-	int idx;
-	int nb_cmd;
-	
+	t_command	*cmd;
+	pid_t		pid;
+	int			idx;
+	int			nb_cmd;
+
 	cmd = data->cmd_list;
 	idx = 0;
 	nb_cmd = count_cmd(cmd);
@@ -216,8 +92,8 @@ int exec_cmd(t_minishell *data, pid_t *pid_last_process, int **pipe_fd)
 
 int	execute(t_minishell *data)
 {
-	t_exec exec;
-	
+	t_exec	exec;
+
 	exec.last_pid = 0;
 	exec.cmd = data->cmd_list;
 	if (!exec.cmd)
