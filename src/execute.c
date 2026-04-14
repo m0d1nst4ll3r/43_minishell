@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/13 16:39:29 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/14 12:33:45 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,8 @@ static void exec_child(t_minishell *data, t_command *cmd, int **pipe_fd, int nb_
 		dup2(cmd->heredoc_fd, STDIN_FILENO);
 		safe_close(&cmd->heredoc_fd);
 	}
-	handle_redir(data, cmd);
+	if (!handle_redir(cmd))
+		exit_prog(data, 1);
 	child_process(data, cmd);
 }
 

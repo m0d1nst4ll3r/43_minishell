@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 14:16:35 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/13 16:41:29 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/14 12:32:22 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int exec_builtin(t_minishell *data, t_command *cmd, char ***ep)
 	int retval;
 
 	ac = 0;
-	handle_redir(data, cmd);
 	retval = 1;
 	while (cmd->argv[ac])
 		ac++;
@@ -65,6 +64,8 @@ int exec_one_builtin(t_minishell *data)
 	
 	fd[0] = dup(STDIN_FILENO);
 	fd[1] = dup(STDOUT_FILENO);
+	if (!handle_redir(data->cmd_list))
+		return (1);
 	retval = exec_builtin(data, data->cmd_list, &data->env);
 	dup2(fd[0], STDIN_FILENO);
 	dup2(fd[1], STDOUT_FILENO);
