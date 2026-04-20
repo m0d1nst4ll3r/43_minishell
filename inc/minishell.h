@@ -6,14 +6,12 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:59:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 12:45:44 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 14:57:54 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-extern int	g_signal;
 
 // ================================== SYSTEM ==================================
 # include <stdio.h>
@@ -27,12 +25,15 @@ extern int	g_signal;
 # include <unistd.h>
 # include <sys/wait.h>
 # include <limits.h>
-# include <sys/types.h> //
-# include <sys/stat.h> //
+# include <sys/types.h>
+# include <sys/stat.h>
+
 // =================================== USER ===================================
 # include "libft.h"
 # include "structure.h"
 # include "prototype.h"
 # include "macro.h"
+
+extern int	g_signal;
 
 #endif

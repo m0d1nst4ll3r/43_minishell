@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 11:38:07 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/14 12:54:22 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 16:23:49 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ int	builtin_exit(int ac, char **argv, t_minishell *data)
 	{
 		if (!is_numeric(argv[1]))
 		{
-			ft_fprintf(1, "exit\n");
+			if (!data->forked)
+				printf("exit\n");
 			print_error_exit(argv[1], "numeric argument required");
 			exit_prog(data, 2);
 		}
@@ -107,7 +108,8 @@ int	builtin_exit(int ac, char **argv, t_minishell *data)
 			return (1);
 		}
 	}
-	ft_fprintf(1, "exit\n");
+	if (!data->forked)
+		printf("exit\n");
 	if (ac == 2)
 		status = atol_safe(argv[1]);
 	exit_prog(data, status);

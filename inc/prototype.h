@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/14 13:03:36 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 16:28:12 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@
 //	Shell setup
 //
 char			**build_env(char **envp);
-int				setup_signal_handlers(void);
+int				set_sigquit(void);
+int				set_sigint(void);
+int				unset_sigint(void);
 int				reset_signal_handlers(void);
 int				event_hook(void);
 
@@ -51,10 +53,10 @@ void			safe_close(int *fd);
 void			clear_pipes(int **pipe_fd, int nb_pipes);
 int				**create_pipes(int nb_pipes);
 void			handle_pipes(int **pipe_fd, int nb_cmd, int idx);
-int 			handle_heredoc(t_minishell *data);
-int 			is_builtin(char *cmd);
-int 			exec_builtin(t_minishell *data, t_command *cmd, char ***ep);
-int 			exec_one_builtin(t_minishell *data);
+int				handle_heredoc(t_minishell *data);
+int				is_builtin(char *cmd);
+int				exec_builtin(t_minishell *data, t_command *cmd, char ***ep);
+int				exec_one_builtin(t_minishell *data);
 int				handle_redir(t_command *cmd);
 char			*get_path(t_minishell *data, t_command *cmd);
 void			check_access(t_minishell *data, t_command *cmd, char *path);
@@ -71,7 +73,7 @@ int				builtin_pwd(int ac, char **av, char **ep);
 int				builtin_env(int ac, char **av, char **ep);
 int				builtin_export(int ac, char **av, char ***ep);
 int				builtin_unset(int ac, char **av, char ***ep);
-int 			builtin_exit(int ac, char **argv, t_minishell *data);
+int				builtin_exit(int ac, char **argv, t_minishell *data);
 
 //
 //	Util
@@ -85,7 +87,7 @@ void			get_expanded_envar_len(char *line, t_minishell *d, size_t *i,
 					size_t *len);
 size_t			write_expanded_envar(char *line, t_minishell *d, size_t *len,
 					char *word);
-void 			exit_prog(t_minishell *data, int status);
+void			exit_prog(t_minishell *data, int status);
 // Error
 void			print_error(char *err_str);
 void			print_error_builtin(char *name, char *err_str);

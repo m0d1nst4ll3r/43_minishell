@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:39:51 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/14 12:42:52 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 16:46:15 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static char	*read_heredoc_line(void)
 {
 	char	*line;
 
-	write(1, ">", 1);
+	write(1, "> ", 2);
 	line = get_next_line(0);
 	if (line == NULL)
 		return (NULL);
@@ -25,11 +25,13 @@ static char	*read_heredoc_line(void)
 	return (line);
 }
 
-static void	write_line(char *line, int fd, t_minishell *data)
+static void	write_line(char *line, int fd, t_minishell *data, char *limiter)
 {
 	char	*expand;
 
-	expand = expand_line(line, data);
+	expand = NULL;
+	if (!ft_strchr(limiter, '\'') && !ft_strchr(limiter, '\"'))
+		expand = expand_line(line, data);
 	if (expand)
 	{
 		free(line);
@@ -63,7 +65,7 @@ static int	exec_heredoc(char *limiter, t_minishell *data)
 			free(line);
 			break ;
 		}
-		write_line(line, fd[1], data);
+		write_line(line, fd[1], data, limiter);
 	}
 	close(fd[1]);
 	return (fd[0]);

@@ -1,0 +1,46 @@
+Tasks
+
+- Norm
+- Protect ALL mallocs, dup, dup2, fork, execve, etc... free all, close all fds and exit
+- Test, test, test and document all deviations from posix bash
+
+Deviations from bash
+
+GENERAL
+
+- SIGQUIT and other terminating signals do not print a "Quit" or "core dumped" message
+	- The correct way to do it would be using strsignal() but this is not allowed
+- No \
+- No && || and ( )
+- No ;
+- No *
+- No & (or Ctrl-Z or fg)
+- No local vars
+- No accurate syntax errors (just a general syntax error)
+- No keeping stdin open if a " or ' is not closed (just syntax error)
+
+BUILTINS
+
+- echo only accepts -n, does not accept -nn, does not accept any other - option
+- A pipeline ending with exit prints "exit"
+	- The planned implementation is to never print exit at all
+	- We can also just keep it like this
+- pwd ignores symlinks
+- cd does not update $PWD or $OLDPWD
+- cd - does not work
+- ~ is not expanded
+
+HEREDOC
+
+- << EOF allows quitting in the middle of a line with Ctrl+D (bash does not allow this)
+- << EOF does not print any warning when quitting with Ctrl+D
+	- Detail + hard to do so, whatever
+- << EOF cat does not print a newline after ending a heredoc with Ctrl+D on an empty line
+- " and ' only stop expansion in heredocs if they are explicitly contained in the limiter ("'EOF" but not "EOF")
+- << $USER limiter is expanded envar, not original $USER string
+
+ENVAR
+
+- $"ENVAR" still prints the $
+- $2 etc... do not work
+- Envars are not split according to IFS

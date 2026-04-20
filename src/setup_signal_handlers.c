@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:09:43 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/30 14:32:30 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 16:26:30 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,33 @@ int	reset_signal_handlers(void)
 	return (0);
 }
 
-int	setup_signal_handlers(void)
+int	set_sigint(void)
+{
+	struct sigaction	sa;
+
+	ft_memset(&sa, 0, sizeof(sa));
+	if (sigemptyset(&sa.sa_mask))
+		return (1);
+	sa.sa_handler = sigint_handler;
+	if (sigaction(SIGINT, &sa, NULL))
+		return (1);
+	return (0);
+}
+
+int	unset_sigint(void)
+{
+	struct sigaction	sa;
+
+	ft_memset(&sa, 0, sizeof(sa));
+	if (sigemptyset(&sa.sa_mask))
+		return (1);
+	sa.sa_handler = SIG_IGN;
+	if (sigaction(SIGINT, &sa, NULL))
+		return (1);
+	return (0);
+}
+
+int	set_sigquit(void)
 {
 	struct sigaction	sa;
 
@@ -54,9 +80,6 @@ int	setup_signal_handlers(void)
 		return (1);
 	sa.sa_handler = SIG_IGN;
 	if (sigaction(SIGQUIT, &sa, NULL))
-		return (1);
-	sa.sa_handler = sigint_handler;
-	if (sigaction(SIGINT, &sa, NULL))
 		return (1);
 	return (0);
 }

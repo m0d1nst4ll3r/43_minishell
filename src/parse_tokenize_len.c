@@ -6,13 +6,14 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:43:47 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/13 15:31:23 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 14:59:19 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static size_t	check_state(t_parse_state state, size_t len, int had_quotes, int *last_return)
+static size_t	check_state(t_parse_state state, size_t len, int had_quotes,
+		int *last_return)
 {
 	if (state != STATE_NONE)
 	{

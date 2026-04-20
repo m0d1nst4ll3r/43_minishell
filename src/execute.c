@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/14 15:45:14 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 16:22:40 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	wait_process(pid_t pid)
 	int		status;
 	int		retval;
 
-	retval = 130;
+	retval = 1;
 	wpid = 1;
 	while (wpid > 0)
 	{
@@ -28,7 +28,10 @@ static int	wait_process(pid_t pid)
 			if (WIFEXITED(status))
 				retval = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
+			{
+				write(1, "\n", 1);
 				retval = 128 + WTERMSIG(status);
+			}
 		}
 	}
 	return (retval);
@@ -36,6 +39,7 @@ static int	wait_process(pid_t pid)
 
 static void	exec_child(t_minishell *data, t_command *cmd, t_exec *exec, int idx)
 {
+	data->forked = true;
 	if (reset_signal_handlers())
 	{
 		clear_pipes(exec->pipe_fd, exec->nb_cmd - 1);

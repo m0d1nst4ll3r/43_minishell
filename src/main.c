@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/13 15:30:57 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 16:29:16 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,29 +41,32 @@ int	main(int ac, char **av, char **ep)
 
 	(void)ac;
 	(void)av;
-	if (setup_signal_handlers()) // Memo: restore defaults after fork()
+	if (set_sigquit())
 		error_stop(data.env, ERR_SIGNAL);
 	data.env = build_env(ep);
 	data.last_return = 0;
+	data.forked = false;
 	rl_event_hook = event_hook;
 	while (1)
 	{
-		if (g_signal == SIGINT)
+		if (set_sigint())
 		{
-			write(1, "\n", 1);
-			g_signal = 0;
+			; // error_out()
 		}
 		data.line = readline(PROMPT);
+		if (unset_sigint())
+		{
+			; // error_out()
+		}
 		if (!data.line)
 		{
 			printf("exit\n");
 			break ;
 		}
 		add_history(data.line);
-		//printf("You typed: %s\n", data.line);
 		data.cmd_list = parse(&data);
 		if (data.cmd_list)
-			data.last_return = execute(&data); // Memo: Care about passing NULL env to execve in case of failed malloc
+			data.last_return = execute(&data);
 		free(data.line);
 		cleanup_cmd_list(data.cmd_list, 1);
 	}
