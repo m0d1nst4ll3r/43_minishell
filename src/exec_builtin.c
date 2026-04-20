@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 14:16:35 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/14 12:42:39 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 20:09:59 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ int	exec_builtin(t_minishell *data, t_command *cmd, char ***ep)
 	else if (ft_strncmp("pwd", cmd->argv[0], ft_strlen("pwd")) == 0)
 		retval = builtin_pwd(ac, cmd->argv, *ep);
 	else if (ft_strncmp("export", cmd->argv[0], ft_strlen("export")) == 0)
-		retval = builtin_export(ac, cmd->argv, ep);
+		retval = builtin_export(ac, cmd->argv, ep, data);
 	else if (ft_strncmp("unset", cmd->argv[0], ft_strlen("unset")) == 0)
-		retval = builtin_unset(ac, cmd->argv, ep);
+		retval = builtin_unset(ac, cmd->argv, ep, data);
 	else if (ft_strncmp("env", cmd->argv[0], ft_strlen("env")) == 0)
 		retval = builtin_env(ac, cmd->argv, *ep);
 	else if (ft_strncmp("exit", cmd->argv[0], ft_strlen("exit")) == 0)

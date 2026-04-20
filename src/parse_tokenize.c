@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:02:05 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/26 12:16:03 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/20 19:57:00 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	get_token_word(t_minishell *d, size_t *i, t_token *new)
 	if (!new->word)
 	{
 		free(new);
-		return (0);
+		error_out(d, ERR_MALLOC);
 	}
 	new->word[word_len] = 0;
 	fill_word(d, i, new->word);
@@ -61,7 +61,7 @@ static t_token	*get_token(t_minishell *d, size_t *i)
 
 	new = malloc(sizeof(*new));
 	if (!new)
-		return (NULL);
+		error_out(d, ERR_MALLOC);
 	new->next = NULL;
 	new->word = NULL;
 	new->type = get_token_type(d->line + *i);

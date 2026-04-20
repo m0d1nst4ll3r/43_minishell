@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 15:47:59 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/13 15:31:09 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 20:04:14 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static size_t	get_redir_count(t_token *token_list)
 	return (count);
 }
 
-t_command	*organize(t_token *token_list, int *last_return)
+t_command	*organize(t_minishell *d, t_token *token_list, int *last_return)
 {
 	t_command	*cmd_list;
 	t_command	*last;
@@ -89,8 +89,8 @@ t_command	*organize(t_token *token_list, int *last_return)
 	{
 		argv_count = get_argv_count(token_list);
 		if ((!argv_count && !get_redir_count(token_list))
-			|| !create_new_cmd(&cmd_list, argv_count, &last)
-			|| !fill_cmd(&token_list, last))
+			|| !create_new_cmd(d, &cmd_list, argv_count, &last)
+			|| !fill_cmd(d, &token_list, last))
 		{
 			cleanup_cmd_list(cmd_list, 0);
 			return (NULL);

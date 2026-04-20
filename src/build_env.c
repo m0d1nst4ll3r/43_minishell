@@ -6,13 +6,13 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:58:12 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/17 15:12:13 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/20 19:38:05 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	fill_env(char **env, char **envp)
+static void	fill_env(t_minishell *d, char **env, char **envp)
 {
 	size_t	i;
 
@@ -21,18 +21,13 @@ static void	fill_env(char **env, char **envp)
 	{
 		env[i] = ft_strdup(envp[i]);
 		if (!env[i])
-		{
-			print_error(ERR_MALLOC);
-			break ;
-		}
+			error_out(d, ERR_MALLOC);
 		i++;
 	}
 	env[i] = NULL;
 }
 
-// minishell cannot crash, so in case of error, we do not exit,
-//	we just print the error and do with what we have.
-char	**build_env(char **envp)
+char	**build_env(t_minishell *d, char **envp)
 {
 	char	**env;
 	size_t	len;
@@ -42,7 +37,7 @@ char	**build_env(char **envp)
 		len++;
 	env = malloc(sizeof(*env) * (len + 1));
 	if (!env)
-		return (NULL);
-	fill_env(env, envp);
+		error_out(d, ERR_MALLOC);
+	fill_env(d, env, envp);
 	return (env);
 }

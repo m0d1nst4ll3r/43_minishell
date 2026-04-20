@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:10 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/13 15:31:34 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 20:06:38 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_command	*parse(t_minishell *d)
 	t_command	*cmd_list;
 
 	token_list = tokenize(d);
-	cmd_list = organize(token_list, &d->last_return);
+	cmd_list = organize(d, token_list, &d->last_return);
 	if (!cmd_list)
 		cleanup_token_list(token_list, 1);
 	else

@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:20:06 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 14:54:10 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/20 20:18:55 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static char	*get_to_delete(char *envar, char **env)
 	return (NULL);
 }
 
-static int	unset_envar(char *name, char *to_unset, char ***ep)
+static int	unset_envar(char *to_unset, char ***ep, t_minishell *d)
 {
 	char	**new_env;
 	char	*to_delete;
@@ -57,12 +57,9 @@ static int	unset_envar(char *name, char *to_unset, char ***ep)
 	to_delete = get_to_delete(to_unset, *ep);
 	if (!to_delete)
 		return (0);
-	new_env = ft_malloc(sizeof(*new_env) * get_env_size(*ep));
+	new_env = malloc(sizeof(*new_env) * get_env_size(*ep));
 	if (!new_env)
-	{
-		print_error_builtin(name, ERR_MALLOC);
-		return (1);
-	}
+		error_out(d, ERR_MALLOC);
 	delete_from_env(to_delete, *ep, new_env);
 	free(to_delete);
 	free(*ep);
@@ -70,12 +67,12 @@ static int	unset_envar(char *name, char *to_unset, char ***ep)
 	return (0);
 }
 
-int	builtin_unset(int ac, char **av, char ***ep)
+int	builtin_unset(int ac, char **av, char ***ep, t_minishell *d)
 {
 	while (--ac)
 	{
 		av++;
-		if (unset_envar(av[0], *av, ep))
+		if (unset_envar(*av, ep, d))
 			return (1);
 	}
 	return (0);

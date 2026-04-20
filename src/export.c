@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 19:33:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/07 13:49:00 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 20:13:00 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,14 @@ static char	**get_to_replace(char *envar, char **env)
 	return (NULL);
 }
 
-static int	add_new_envar(char *new_envar, char ***old_env)
+static int	add_new_envar(char *new_envar, char ***old_env, t_minishell *d)
 {
 	char	**new_env;
 	size_t	i;
 
 	new_env = malloc(sizeof(*new_env) * (get_env_size(*old_env) + 2));
 	if (!new_env)
-		return (1);
+		error_out(d, ERR_MALLOC);
 	i = 0;
 	while (old_env[0][i])
 	{
@@ -76,26 +76,23 @@ static int	add_new_envar(char *new_envar, char ***old_env)
 	return (0);
 }
 
-static int	export_envar(char *name, char *envar, char ***ep)
+static int	export_envar(char *envar, char ***ep, t_minishell *d)
 {
 	char	**to_replace;
 	char	*new_envar;
 
 	new_envar = ft_strdup(envar);
 	if (!new_envar)
-	{
-		print_error_builtin(name, ERR_MALLOC);
-		return (1);
-	}
+		error_out(d, ERR_MALLOC);
 	to_replace = get_to_replace(envar, *ep);
 	if (!to_replace)
-		return (add_new_envar(new_envar, ep));
+		return (add_new_envar(new_envar, ep, d));
 	free(*to_replace);
 	*to_replace = new_envar;
 	return (0);
 }
 
-int	builtin_export(int ac, char **av, char ***ep)
+int	builtin_export(int ac, char **av, char ***ep, t_minishell *d)
 {
 	size_t	i;
 	int		ret;
@@ -108,7 +105,7 @@ int	builtin_export(int ac, char **av, char ***ep)
 	{
 		if (is_valid_identifier(av[0], av[i]))
 			ret = 1;
-		else if (export_envar(av[0], av[i], ep))
+		else if (export_envar(av[i], ep, d))
 		{
 			print_error_builtin(av[0], ERR_MALLOC);
 			return (1);

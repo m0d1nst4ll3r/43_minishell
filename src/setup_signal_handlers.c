@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:09:43 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 16:26:30 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/20 20:21:52 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,6 @@ int	g_signal = 0;
 static void	sigint_handler(int signum)
 {
 	g_signal = signum;
-}
-
-int	event_hook(void)
-{
-	if (g_signal == SIGINT)
-	{
-		g_signal = 0;
-		rl_replace_line("", 1);
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_redisplay();
-	}
-	return (0);
 }
 
 int	reset_signal_handlers(void)

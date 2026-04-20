@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 18:08:00 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 19:24:01 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ static void	exec_child(t_minishell *data, t_command *cmd, int idx)
 	data->forked = true;
 	if (reset_signal_handlers())
 	{
-		clear_pipes(data->exec.pipe_fd, data->exec.nb_cmd - 1);
+		clear_pipes(&(data->exec.pipe_fd));
 		exit_prog(data, 1);
 	}
 	handle_pipes(data->exec.pipe_fd, data->exec.nb_cmd, idx);
-	clear_pipes(data->exec.pipe_fd, data->exec.nb_cmd - 1);
+	clear_pipes(&(data->exec.pipe_fd));
 	if (cmd->heredoc_fd != -1)
 	{
 		dup2(cmd->heredoc_fd, STDIN_FILENO);
@@ -78,7 +78,7 @@ static int	exec_cmd(t_minishell *data)
 		if (pid == -1)
 		{
 			print_error(ERR_FORK);
-			clear_pipes(data->exec.pipe_fd, data->exec.nb_cmd - 1);
+			clear_pipes(&(data->exec.pipe_fd));
 			return (0);
 		}
 		if (pid == 0)
@@ -96,21 +96,21 @@ int	execute(t_minishell *data)
 	if (!data->exec.cmd)
 		return (0);
 	data->exec.nb_cmd = count_cmd(data->exec.cmd);
-	data->exec.pipe_fd = create_pipes(data->exec.nb_cmd - 1);
+	data->exec.pipe_fd = create_pipes(data, data->exec.nb_cmd - 1);
 	if (!data->exec.pipe_fd)
 		return (0);
 	if (!handle_heredoc(data))
 	{
-		clear_pipes(data->exec.pipe_fd, data->exec.nb_cmd - 1);
+		clear_pipes(&(data->exec.pipe_fd));
 		return (128 + g_signal);
 	}
 	if (data->exec.nb_cmd == 1 && is_builtin(data->exec.cmd->argv[0]))
 	{
-		clear_pipes(data->exec.pipe_fd, data->exec.nb_cmd - 1);
+		clear_pipes(&(data->exec.pipe_fd));
 		return (exec_one_builtin(data));
 	}
 	if (!exec_cmd(data))
 		return (1);
-	clear_pipes(data->exec.pipe_fd, data->exec.nb_cmd - 1);
+	clear_pipes(&(data->exec.pipe_fd));
 	return (wait_process(data->exec.last_pid));
 }

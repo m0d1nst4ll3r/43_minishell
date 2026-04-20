@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 11:46:59 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/02 14:50:51 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 20:14:59 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*expand_line(char *line, t_minishell *d)
 	new_len = get_new_len(line, d);
 	new_line = malloc(new_len + 1);
 	if (!new_line)
-		return (NULL); // Will call error_out if we ever change
+		error_out(d, ERR_MALLOC);
 	if (new_len == 0)
 	{
 		new_line[0] = '\0';

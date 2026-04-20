@@ -6,61 +6,50 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:33:20 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/20 18:10:53 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 20:18:34 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	clear_pipes(int **pipe_fd, int nb_pipes)
+void	clear_pipes(int ***pipe_fd)
 {
 	int	i;
 
 	i = 0;
-	if (!pipe_fd)
-	{
+	if (!*pipe_fd)
 		return ;
-	}
-	while (i < nb_pipes)
+	while ((*pipe_fd)[i])
 	{
-		safe_close(&pipe_fd[i][0]);
-		safe_close(&pipe_fd[i][1]);
-		if (pipe_fd[i])
-		{
-			free(pipe_fd[i]);
-			pipe_fd[i] = NULL;
-		}
+		safe_close((*pipe_fd)[i]);
+		safe_close((*pipe_fd)[i] + 1);
+		free((*pipe_fd)[i]);
 		i++;
 	}
-	ft_free((void **)&pipe_fd);
+	ft_free((void **)pipe_fd);
 }
 
-int	**create_pipes(int nb_pipes)
+int	**create_pipes(t_minishell *data, int nb_pipes)
 {
 	int	**pipe_fd;
 	int	i;
 
-	pipe_fd = ft_malloc(sizeof(int *) * nb_pipes);
+	pipe_fd = malloc(sizeof(int *) * (nb_pipes + 1));
 	if (!pipe_fd)
-		return (NULL);
+		error_out(data, ERR_MALLOC);
+	ft_memset(pipe_fd, 0, sizeof(*pipe_fd) * (nb_pipes + 1));
 	i = -1;
 	while (++i < nb_pipes)
 	{
-		pipe_fd[i] = ft_malloc(sizeof(int) * 2);
+		pipe_fd[i] = malloc(sizeof(int) * 2);
 		if (!pipe_fd[i])
-		{
-			clear_pipes(pipe_fd, i);
-			return (NULL);
-		}
+			error_out(data, ERR_MALLOC);
 		pipe_fd[i][0] = -1;
 		pipe_fd[i][1] = -1;
 		if (pipe(pipe_fd[i]) == -1)
-		{
-			print_error("pipe error");
-			clear_pipes(pipe_fd, i);
-			return (NULL);
-		}
+			error_out(data, ERR_PIPE);
 	}
+	pipe_fd[i] = NULL;
 	return (pipe_fd);
 }
 

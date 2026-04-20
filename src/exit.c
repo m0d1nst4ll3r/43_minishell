@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 11:38:07 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/20 16:23:49 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/20 20:20:44 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,11 @@ static long	atol_safe(char *str)
 
 void	exit_prog(t_minishell *data, int status)
 {
+	clear_pipes(&(data->exec.pipe_fd));
 	free(data->line);
 	cleanup_cmd_list(data->cmd_list, 1);
-	cleanup_prog(data->env);
+	cleanup_env(data->env);
+	rl_clear_history();
 	exit(status);
 }
 

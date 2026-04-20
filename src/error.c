@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_error.c                                      :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/13 15:29:41 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 14:58:53 by rapohlen         ###   ########.fr       */
+/*   Created: 2026/04/20 20:19:52 by rapohlen          #+#    #+#             */
+/*   Updated: 2026/04/20 20:20:26 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,10 @@ void	print_error_exit(char *arg, char *err_str)
 		ft_fprintf(2, "%s: exit: %s: %s\n", NAME, arg, err_str);
 	else
 		ft_fprintf(2, "%s: exit: %s\n", NAME, err_str);
+}
+
+void	error_out(t_minishell *data, char *err_str)
+{
+	print_error(err_str);
+	exit_prog(data, 1);
 }
