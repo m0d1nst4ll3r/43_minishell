@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:20:06 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/03/24 11:45:20 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 12:51:39 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ static int	unset_envar(char *name, char *to_unset, char ***ep)
 		print_error_builtin(name, ERR_MALLOC);
 		return (1);
 	}
-	free(to_delete);
 	delete_from_env(to_delete, *ep, new_env);
+	free(to_delete);
 	free(*ep);
 	*ep = new_env;
 	return (0);

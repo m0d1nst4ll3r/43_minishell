@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:59:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/01 14:55:36 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 12:45:44 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 extern int	g_signal;
 
 // ================================== SYSTEM ==================================
+# include <stdio.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
