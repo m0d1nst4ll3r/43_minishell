@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 13:00:06 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/14 13:06:24 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 18:55:48 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	check_access(t_minishell *data, t_command *cmd, char *path)
 
 	if (!path)
 	{
-		ft_fprintf(2, "%s: %s: command not found\n", NAME, cmd->argv[0]);
+		print_error_builtin(cmd->argv[0], ERR_NOCMD);
 		exit_prog(data, 127);
 	}
 	if (stat(path, &s) != 0)
@@ -102,7 +102,7 @@ void	check_access(t_minishell *data, t_command *cmd, char *path)
 	}
 	if (S_ISDIR(s.st_mode))
 	{
-		ft_fprintf(2, "%s: %s: Is a directory\n", NAME, cmd->argv[0]);
+		print_error_builtin(cmd->argv[0], ERR_ISDIR);
 		free(path);
 		exit_prog(data, 126);
 	}

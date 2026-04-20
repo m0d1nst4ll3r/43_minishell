@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:00:56 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 16:21:58 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/20 17:50:44 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_minishell
 	char		**env;
 	char		*line;
 	t_command	*cmd_list;
+	t_exec		exec;
 	int			last_return;
 	bool		forked;
 }	t_minishell;

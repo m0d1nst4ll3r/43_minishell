@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 16:29:16 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/20 17:52:31 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	main(int ac, char **av, char **ep)
 
 	(void)ac;
 	(void)av;
+	ft_memset(&data, 0, sizeof(data));
 	if (set_sigquit())
 		error_stop(data.env, ERR_SIGNAL);
 	data.env = build_env(ep);

@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:33:20 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/14 12:43:09 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/20 18:10:53 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	clear_pipes(int **pipe_fd, int nb_pipes)
 		}
 		i++;
 	}
-	free(pipe_fd);
+	ft_free((void **)&pipe_fd);
 }
 
 int	**create_pipes(int nb_pipes)
