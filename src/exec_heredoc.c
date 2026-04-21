@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:39:51 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/21 12:03:13 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/21 14:30:59 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,14 @@ static int	exec_heredoc(char *limiter, t_minishell *data)
 
 	if (pipe(fd) == -1)
 		error_out(data, ERR_PIPE);
-	// {
-	// 	print_error(ERR_PIPE);
-	// 	return (-1);
-	// }
 	while (1)
 	{
-		if (g_signal == SIGINT)
-			return (close(fd[0]), close(fd[1]), -1);
 		line = read_heredoc_line();
+		if (g_signal == SIGINT)
+		{
+			write(1, "\n", 1);
+			return (close(fd[0]), close(fd[1]), -1);
+		}
 		if (!line)
 			break ;
 		if (ft_strncmp(limiter, line, ft_strlen(limiter)) == 0

@@ -1,8 +1,12 @@
 Tasks
 
-- Norm
-- Protect ALL mallocs, dup, dup2, fork, execve, etc... free all, close all fds and exit
 - Test, test, test and document all deviations from posix bash
+
+
+Problems
+
+1. "command not found" message adds an errno behind it
+2. Ctrl+\ during heredoc prints something and cuts the line
 
 Deviations from bash
 
@@ -18,6 +22,7 @@ GENERAL
 - No local vars
 - No accurate syntax errors (just a general syntax error)
 - No keeping stdin open if a " or ' is not closed (just syntax error)
+- Ctrl+Z puts shell to background (normal shells do not allow this)
 
 BUILTINS
 
@@ -44,3 +49,4 @@ ENVAR
 - $"ENVAR" still prints the $
 - $2 etc... do not work
 - Envars are not split according to IFS
+- $PWD $OLDPWD $UID $SHLVL and some other envars not managed by shell

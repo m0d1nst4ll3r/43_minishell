@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 20:22:03 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/21 14:15:20 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,10 @@ static void	shell_loop(t_minishell *data)
 {
 	while (1)
 	{
+		g_signal = 0;
 		if (set_sigint())
 			error_out(data, ERR_SIGNAL);
 		data->line = readline(PROMPT);
-		if (unset_sigint())
-			error_out(data, ERR_SIGNAL);
 		if (!data->line)
 			builtin_exit(0, NULL, data);
 		add_history(data->line);
