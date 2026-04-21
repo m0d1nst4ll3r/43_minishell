@@ -6,22 +6,34 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:39:51 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/21 14:30:59 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/21 20:01:23 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	event_hook(void)
+{
+	if (g_signal == SIGINT)
+	{
+		write(1, "^C", 2);
+		rl_done = 1;
+	}
+	return (0);
+}
+
 static char	*read_heredoc_line(void)
 {
+	int		len;
 	char	*line;
 
-	write(1, "> ", 2);
-	line = get_next_line(0);
+	rl_event_hook = event_hook;
+	line = readline("> ");
 	if (line == NULL)
 		return (NULL);
-	if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '\n')
-		line[ft_strlen(line) - 1] = '\0';
+	len = ft_strlen(line);
+	if (len > 0 && line[len - 1] == '\n')
+		line[len - 1] = '\0';
 	return (line);
 }
 
@@ -53,10 +65,7 @@ static int	exec_heredoc(char *limiter, t_minishell *data)
 	{
 		line = read_heredoc_line();
 		if (g_signal == SIGINT)
-		{
-			write(1, "\n", 1);
 			return (close(fd[0]), close(fd[1]), -1);
-		}
 		if (!line)
 			break ;
 		if (ft_strncmp(limiter, line, ft_strlen(limiter)) == 0

@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:05:03 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/21 14:15:20 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/21 18:58:43 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	event_hook(void)
 	{
 		g_signal = 0;
 		rl_replace_line("", 1);
-		write(1, "\n", 1);
+		write(1, "^C\n", 3);
 		rl_on_new_line();
 		rl_redisplay();
 	}
@@ -30,6 +30,7 @@ static void	shell_loop(t_minishell *data)
 	while (1)
 	{
 		g_signal = 0;
+		rl_event_hook = event_hook;
 		if (set_sigint())
 			error_out(data, ERR_SIGNAL);
 		data->line = readline(PROMPT);
@@ -66,6 +67,6 @@ int	main(int ac, char **av, char **ep)
 	data.env = build_env(&data, ep);
 	data.last_return = 0;
 	data.forked = false;
-	rl_event_hook = event_hook;
+	rl_catch_signals = 0;
 	shell_loop(&data);
 }

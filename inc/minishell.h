@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 14:59:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/21 13:45:24 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/21 20:36:18 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <stdbool.h>
+# include <paths.h>
 
 // =================================== USER ===================================
 # include "libft.h"

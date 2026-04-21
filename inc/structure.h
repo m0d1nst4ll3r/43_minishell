@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:00:56 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 17:50:44 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/21 20:47:45 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef enum e_token_type
 typedef struct s_token
 {
 	t_token_type	type;
-	char			*word; // If token is not WORD, this is NULL
+	char			*word;
 	struct s_token	*next;
 }	t_token;
 
@@ -56,7 +56,7 @@ typedef enum e_redir_type
 typedef struct s_redir
 {
 	t_redir_type	type;
-	char			*file; // Also works for HEREDOC limiter
+	char			*file;
 	struct s_redir	*next;
 }	t_redir;
 

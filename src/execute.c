@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/21 14:30:02 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/21 19:42:49 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,7 @@ static void	exec_child(t_minishell *data, t_command *cmd, int idx)
 {
 	data->forked = true;
 	if (reset_signal_handlers())
-	{
-		clear_pipes(&(data->exec.pipe_fd));
-		exit_prog(data, 1);
-	}
+		error_out(data, ERR_SIGNAL);
 	handle_pipes(data->exec.pipe_fd, data->exec.nb_cmd, idx);
 	clear_pipes(&(data->exec.pipe_fd));
 	if (cmd->heredoc_fd != -1)
@@ -76,9 +73,7 @@ static int	exec_cmd(t_minishell *data)
 	{
 		pid = fork();
 		if (pid == -1)
-		{
 			error_out(data, ERR_FORK);
-		}
 		if (pid == 0)
 			exec_child(data, data->exec.cmd, idx);
 		else
@@ -112,6 +107,5 @@ int	execute(t_minishell *data)
 	if (!exec_cmd(data))
 		return (1);
 	clear_pipes(&(data->exec.pipe_fd));
-	printf("");
 	return (wait_process(data->exec.last_pid));
 }

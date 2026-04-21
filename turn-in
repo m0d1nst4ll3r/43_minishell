@@ -5,10 +5,12 @@ Tasks
 
 Problems
 
-1. "command not found" message adds an errno behind it
-2. Ctrl+\ during heredoc prints something and cuts the line
+1. Norm
+2. Maybe a "bad address" problem with execve's path (valgrind?)
 
-Deviations from bash
+----------------------------------------------------------------
+--------------------- Deviations from bash ---------------------
+----------------------------------------------------------------
 
 GENERAL
 

@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 13:00:06 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/21 16:42:05 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/21 20:48:12 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*get_path(t_minishell *data, t_command *cmd)
 		if (!tmp_path)
 		{
 			free_dir_lst(dir_lst);
-			ft_free((void**)&path);
+			ft_free((void **)&path);
 			exit_prog(data, 1);
 		}
 		if (access(tmp_path, F_OK) == 0)
