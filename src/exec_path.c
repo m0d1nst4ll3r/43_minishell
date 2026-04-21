@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 13:00:06 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/20 18:55:48 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/21 16:42:05 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ static char	**get_dir_lst(char **envp)
 char	*get_path(t_minishell *data, t_command *cmd)
 {
 	char	*path;
+	char	*tmp_path;
 	char	**dir_lst;
 	int		i;
 
@@ -68,21 +69,30 @@ char	*get_path(t_minishell *data, t_command *cmd)
 	if (!dir_lst)
 		return (NULL);
 	i = 0;
+	path = NULL;
+	tmp_path = NULL;
 	while (dir_lst[i])
 	{
-		path = make_path(dir_lst[i], cmd->argv[0]);
-		if (!path)
+		tmp_path = make_path(dir_lst[i], cmd->argv[0]);
+		if (!tmp_path)
 		{
 			free_dir_lst(dir_lst);
+			ft_free((void**)&path);
 			exit_prog(data, 1);
 		}
-		if (access(path, F_OK) == 0)
-			return (free_dir_lst(dir_lst), path);
-		free(path);
+		if (access(tmp_path, F_OK) == 0)
+		{
+			path = tmp_path;
+			tmp_path = NULL;
+			if (access(path, X_OK) == 0)
+				break ;
+		}
+		else
+			ft_free((void **)&tmp_path);
 		i++;
 	}
 	free_dir_lst(dir_lst);
-	return (NULL);
+	return (path);
 }
 
 void	check_access(t_minishell *data, t_command *cmd, char *path)
@@ -91,7 +101,7 @@ void	check_access(t_minishell *data, t_command *cmd, char *path)
 
 	if (!path)
 	{
-		print_error_builtin(cmd->argv[0], ERR_NOCMD);
+		ft_fprintf(2, "%s: %s: %s\n", NAME, cmd->argv[0], ERR_NOCMD);
 		exit_prog(data, 127);
 	}
 	if (stat(path, &s) != 0)

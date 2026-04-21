@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 20:19:52 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 20:20:26 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/21 16:09:01 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ void	print_error(char *err_str)
 	if (!err_str)
 		err_str = ERR_DEFAULT;
 	if (errno)
+	{
 		ft_fprintf(2, "%s: %s: %s\n", NAME, err_str, strerror(errno));
+		errno = 0;
+	}
 	else
 		ft_fprintf(2, "%s: %s\n", NAME, err_str);
 }
@@ -27,7 +30,10 @@ void	print_error_builtin(char *name, char *err_str)
 	if (!err_str)
 		err_str = ERR_DEFAULT;
 	if (errno)
+	{
 		ft_fprintf(2, "%s: %s: %s: %s\n", NAME, name, err_str, strerror(errno));
+		errno = 0;
+	}
 	else
 		ft_fprintf(2, "%s: %s: %s\n", NAME, name, err_str);
 }
@@ -37,8 +43,11 @@ void	print_error_builtin_file(char *name, char *file, char *err_str)
 	if (!err_str)
 		err_str = ERR_DEFAULT;
 	if (errno)
+	{
 		ft_fprintf(2, "%s: %s: %s: %s: %s\n",
 			NAME, name, file, err_str, strerror(errno));
+		errno = 0;
+	}
 	else
 		ft_fprintf(2, "%s: %s: %s: %s\n", NAME, name, file, err_str);
 }
