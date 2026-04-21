@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:30:37 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 19:24:01 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/21 11:59:08 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,10 @@ static int	exec_cmd(t_minishell *data)
 		pid = fork();
 		if (pid == -1)
 		{
-			print_error(ERR_FORK);
-			clear_pipes(&(data->exec.pipe_fd));
-			return (0);
+			// print_error(ERR_FORK);
+			// clear_pipes(&(data->exec.pipe_fd));
+			// return (0);
+			error_out(data, ERR_FORK);
 		}
 		if (pid == 0)
 			exec_child(data, data->exec.cmd, idx);

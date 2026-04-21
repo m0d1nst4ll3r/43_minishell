@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 12:58:13 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/20 18:16:51 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/21 12:28:20 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	child_process(t_minishell *data, t_command *cmd)
 	path = get_path(data, cmd);
 	check_access(data, cmd, path);
 	execve(path, cmd->argv, data->env);
-	perror("execve");
+	print_error("execve");
 	free(path);
 	exit_prog(data, 1);
 }

@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:04:36 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 18:56:08 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/21 12:06:30 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # define ERR_SYNTAX		"syntax error"
 # define ERR_PIPE       "pipe error"
 # define ERR_FORK       "fork error"
+# define ERR_DUP        "dup error"
+# define ERR_DUP2       "dup2 error"
 
 # define ERR_CDARGS		"too many arguments"
 # define ERR_CDHOME		"HOME not set"
