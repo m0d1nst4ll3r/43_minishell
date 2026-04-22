@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 12:58:13 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/21 21:15:09 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/22 13:43:44 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	exec_shell(t_minishell *data, t_command *cmd, char *path)
 	int		i;
 	char	**new_argv;
 
-	new_argv = malloc(sizeof(*new_argv) * (get_argc(cmd->argv) + 1));
+	new_argv = malloc(sizeof(*new_argv) * (get_argc(cmd->argv) + 2));
 	if (!new_argv)
 		error_out(data, ERR_MALLOC);
 	new_argv[0] = _PATH_BSHELL;
@@ -35,6 +35,7 @@ static void	exec_shell(t_minishell *data, t_command *cmd, char *path)
 	i = 0;
 	while (cmd->argv[++i])
 		new_argv[i + 1] = cmd->argv[i];
+	new_argv[i + 1] = NULL;
 	execve(_PATH_BSHELL, new_argv, data->env);
 	free(new_argv);
 }
