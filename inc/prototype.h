@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 20:23:05 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/22 12:49:59 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int				exec_builtin(t_minishell *data, t_command *cmd, char ***ep);
 int				exec_one_builtin(t_minishell *data);
 int				handle_redir(t_command *cmd);
 char			*get_path(t_minishell *data, t_command *cmd);
+void			free_dir_lst(char **dir_lst);
 void			check_access(t_minishell *data, t_command *cmd, char *path);
 void			child_process(t_minishell *data, t_command *cmd);
 // Heredoc
