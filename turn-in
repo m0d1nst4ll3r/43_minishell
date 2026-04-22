@@ -2,12 +2,6 @@ Tasks
 
 - Test, test, test and document all deviations from posix bash
 
-
-Problems
-
-1. Norm
-2. Maybe a "bad address" problem with execve's path (valgrind?)
-
 ----------------------------------------------------------------
 --------------------- Deviations from bash ---------------------
 ----------------------------------------------------------------
@@ -25,6 +19,9 @@ GENERAL
 - No accurate syntax errors (just a general syntax error)
 - No keeping stdin open if a " or ' is not closed (just syntax error)
 - Ctrl+Z puts shell to background (normal shells do not allow this)
+- pkill vim on another terminal while vim is open in minishell causes minishell to misbehave very badly
+- errors do not display unprintable bytes (such as in file names, try "^Vfile" by typing Ctrl+V twice)
+- pasting input with \n in them does not treat each line separately
 
 BUILTINS
 
@@ -36,6 +33,8 @@ BUILTINS
 - cd does not update $PWD or $OLDPWD
 - cd - does not work
 - ~ is not expanded
+- export with nothing does not print envars (man says unspecified behavior)
+- export with just a var name does not export it (there are no local variables so this would make no sense anyway)
 
 HEREDOC
 

@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 19:33:04 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 20:13:00 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/22 14:01:05 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ static int	is_valid_identifier(char *name, char *str)
 	size_t	i;
 
 	i = 0;
+	if (str[i] == '=')
+	{
+		print_error_builtin_file(name, str, ERR_EXPIDEN);
+		return (1);
+	}
 	while (str[i] && str[i] != '=')
 		i++;
 	if (!str[i])
@@ -24,15 +29,14 @@ static int	is_valid_identifier(char *name, char *str)
 		print_error_builtin_file(name, str, ERR_EXPEQ);
 		return (1);
 	}
-	i = 0;
-	while (str[i] != '=')
+	i = -1;
+	while (str[++i] != '=')
 	{
 		if ((!i && ft_isdigit(str[i])) || !is_envar_char(str[i]))
 		{
 			print_error_builtin_file(name, str, ERR_EXPIDEN);
 			return (1);
 		}
-		i++;
 	}
 	return (0);
 }
