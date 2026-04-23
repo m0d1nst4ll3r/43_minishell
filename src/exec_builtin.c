@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 14:16:35 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/21 12:09:47 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/23 16:19:58 by bdemouge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,24 +66,23 @@ int	exec_builtin(t_minishell *data, t_command *cmd, char ***ep)
 
 int	exec_one_builtin(t_minishell *data)
 {
-	int	fd[2];
 	int	retval;
 
-	fd[0] = dup(STDIN_FILENO);
-	if (fd[0] == -1)
+	data->stdin = dup(STDIN_FILENO);
+	if (data->stdin == -1)
 		error_out(data, ERR_DUP);
-	fd[1] = dup(STDOUT_FILENO);
-	if (fd[1] == -1)
+	data->stdout = dup(STDOUT_FILENO);
+	if (data->stdout == -1)
 		error_out(data, ERR_DUP);
 	if (!handle_redir(data->cmd_list))
 		return (1);
 	retval = exec_builtin(data, data->cmd_list, &data->env);
-	if (dup2(fd[0], STDIN_FILENO) == -1)
+	if (dup2(data->stdin, STDIN_FILENO) == -1)
 		error_out(data, ERR_DUP2);
-	if (dup2(fd[1], STDOUT_FILENO) == -1)
+	if (dup2(data->stdout, STDOUT_FILENO) == -1)
 		error_out(data, ERR_DUP2);
-	close(fd[0]);
-	close(fd[1]);
+	safe_close(&data->stdin);
+	safe_close(&data->stdout);
 	safe_close(&data->cmd_list->heredoc_fd);
 	return (retval);
 }
