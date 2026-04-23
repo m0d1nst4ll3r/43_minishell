@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:02:05 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/20 19:57:00 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/23 15:15:36 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,10 @@ static t_token	*get_token(t_minishell *d, size_t *i)
 	if (new->type == TOKEN_WORD)
 	{
 		if (!get_token_word(d, i, new))
+		{
+			free(new);
 			return (NULL);
+		}
 	}
 	else if (new->type == TOKEN_LESSERLESSER
 		|| new->type == TOKEN_GREATERGREATER)

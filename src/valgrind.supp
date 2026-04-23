@@ -1,0 +1,8 @@
+{
+   readline_all_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*libreadline*
+   ...
+}

@@ -6,7 +6,7 @@
 #    By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 16:45:41 by rapohlen          #+#    #+#              #
-#    Updated: 2026/04/22 12:43:38 by bdemouge         ###   ########.fr        #
+#    Updated: 2026/04/23 15:39:15 by rapohlen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,6 @@ NAME		= minishell
 LIB			= $(LIBFT)
 LINK		= -lreadline
 LIBFT		= libft/libft.a
-LIBFT_REPO	= https://github.com/m0d1nst4ll3r/43_mylibft
 
 # Compiler settings
 CC			= cc
@@ -83,7 +82,6 @@ $(NAME):	$(OBJ) $(LIB)
 
 # Build libraries
 $(LIBFT):
-			if [ ! -d $(dir $(LIBFT)) ]; then git clone $(LIBFT_REPO) $(dir $(LIBFT)); fi
 			$(MAKE) -C $(@D)
 
 # Compile source -> object (auto-create directories)
@@ -93,7 +91,7 @@ $(BUILDDIR)/%.o: %.c | $(LIB)
 
 # Valgrind memory test
 valgrind:	$(NAME)
-			valgrind --leak-check=full --show-leak-kinds=all --suppressions=valgrind.supp --gen-suppressions=all ./$(NAME)
+			valgrind --leak-check=full --show-leak-kinds=all --suppressions=valgrind.supp --gen-suppressions=all --track-fds=yes ./$(NAME)
 
 # Cleanup
 clean:

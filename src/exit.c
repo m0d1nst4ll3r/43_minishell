@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 11:38:07 by bdemouge          #+#    #+#             */
-/*   Updated: 2026/04/20 20:20:44 by rapohlen         ###   ########.fr       */
+/*   Updated: 2026/04/23 14:37:57 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ void	exit_prog(t_minishell *data, int status)
 	cleanup_cmd_list(data->cmd_list, 1);
 	cleanup_env(data->env);
 	rl_clear_history();
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
 	exit(status);
 }
 
