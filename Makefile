@@ -6,7 +6,7 @@
 #    By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 16:45:41 by rapohlen          #+#    #+#              #
-#    Updated: 2026/04/23 15:39:15 by rapohlen         ###   ########.fr        #
+#    Updated: 2026/04/24 16:06:24 by rapohlen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,7 @@ $(BUILDDIR)/%.o: %.c | $(LIB)
 
 # Valgrind memory test
 valgrind:	$(NAME)
-			valgrind --leak-check=full --show-leak-kinds=all --suppressions=valgrind.supp --gen-suppressions=all --track-fds=yes ./$(NAME)
+			valgrind -q --leak-check=full --show-leak-kinds=all --suppressions=valgrind.supp --gen-suppressions=all --track-fds=yes ./$(NAME)
 
 # Cleanup
 clean:

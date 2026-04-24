@@ -6,7 +6,7 @@
 /*   By: bdemouge <bdemouge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:03:53 by rapohlen          #+#    #+#             */
-/*   Updated: 2026/04/22 12:49:59 by bdemouge         ###   ########.fr       */
+/*   Updated: 2026/04/24 15:42:10 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char			*expand_line(char *line, t_minishell *d);
 //
 //	Built-in
 //
-int				builtin_cd(int ac, char **av, char **ep);
+int				builtin_cd(int ac, char **av, char ***ep, t_minishell *d);
 int				builtin_echo(int ac, char **av, char **ep);
 int				builtin_pwd(int ac, char **av, char **ep);
 int				builtin_env(int ac, char **av, char **ep);
