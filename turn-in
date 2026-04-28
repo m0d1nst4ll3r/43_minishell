@@ -2,6 +2,10 @@ Tasks
 
 - Test, test, test and document all deviations from posix bash
 
+Problems:
+- Heredoc has history (2 lines to add)
+- Ctrl+C during prompt does not set return value
+
 ----------------------------------------------------------------
 --------------------- Deviations from bash ---------------------
 ----------------------------------------------------------------
